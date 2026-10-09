@@ -129,6 +129,19 @@ button{font-family:Arial,sans-serif}
 </div>
 
 <script>
+
+    // Render chapter list with start page numbers
+function renderChapterList(chapters) {
+  const container = document.getElementById('chapter-list');
+  if (!container) return;
+
+  container.innerHTML = chapters.map(ch => `
+    <div class="chapter-item" onclick="goToPage(${ch.startPage})">
+      <span class="chapter-title">${ch.title}</span>
+      <span class="page-number">Pg ${ch.startPage}</span>
+    </div>
+  `).join('');
+}
 const API_URL = "http://https://readlive-backend.onrender.com";
 
 let bookId = null;

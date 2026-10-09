@@ -7,6 +7,12 @@
 <script src="http://https://readlive-backend.onrender.com/socket.io/socket.io.js"></script>
 
 <style>
+    /* Mirror participant video elements so they appear like a front-facing selfie camera */
+.participant-card video,
+video {
+  transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+}
 * {
     box-sizing: border-box;
     margin: 0;
