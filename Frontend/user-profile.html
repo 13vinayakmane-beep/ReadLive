@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - User Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        Read<span>Live</span>
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="home.html" class="side-link">
+            🏠 <span>Home</span>
+        </a>
+
+        <a href="books.html" class="side-link">
+            📚 <span>Books</span>
+        </a>
+
+        <a href="live-sessions.html" class="side-link">
+            🔴 <span>Live Sessions</span>
+        </a>
+
+        <a href="search.html" class="side-link">
+            🔍 <span>Search</span>
+        </a>
+
+        <a href="notifications.html" class="side-link">
+            🔔 <span>Notifications</span>
+            <b class="notification-count">3</b>
+        </a>
+
+        <a href="profile.html" class="side-link">
+            👤 <span>Profile</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<div class="main-area">
+
+<header class="topbar">
+
+    <div class="search-box">
+
+        🔍
+
+        <input
+            type="text"
+            placeholder="Search books, users...">
+
+    </div>
+
+    <div class="top-actions">
+
+        <button>🔔</button>
+
+        <button>💬</button>
+
+        <button class="top-profile">
+            V
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="profile-page">
+
+
+<section class="profile-header-card">
+
+
+    <div class="profile-big-avatar">
+        R
+    </div>
+
+
+    <div class="profile-main-info">
+
+        <h1>
+            Rahul Sharma
+        </h1>
+
+        <p>
+            @rahulreads
+        </p>
+
+        <p class="profile-bio">
+            Book enthusiast 📚 |
+            Sharing my reading journey.
+        </p>
+
+
+        <div class="profile-stats">
+
+            <div>
+
+                <strong>
+                    420
+                </strong>
+
+                <span>
+                    Followers
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    210
+                </strong>
+
+                <span>
+                    Following
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    48
+                </strong>
+
+                <span>
+                    Books Read
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="profile-follow-btn"
+        onclick="toggleFollow(this)">
+
+        Follow
+
+    </button>
+
+
+</section>
+
+
+<div class="profile-tabs">
+
+    <button class="profile-tab active">
+        Posts
+    </button>
+
+    <button class="profile-tab">
+        Reading
+    </button>
+
+</div>
+
+
+<div class="profile-post">
+
+    <div class="post-header">
+
+        <div class="user-avatar">
+            R
+        </div>
+
+        <div class="user-info">
+
+            <strong>
+                Rahul Sharma
+            </strong>
+
+            <span>
+                @rahulreads · 1h
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <p class="post-text">
+
+        Just finished reading
+        <strong>
+            The Psychology of Money
+        </strong>.
+        Highly interesting ideas about money
+        and decision making. 📚
+
+    </p>
+
+
+    <div class="post-actions">
+
+        <button>
+            ♡ 37
+        </button>
+
+        <button>
+            💬 8
+        </button>
+
+        <button>
+            ↗ Share
+        </button>
+
+    </div>
+
+</div>
+
+
+</main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

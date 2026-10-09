@@ -1,0 +1,1047 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - Search</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* TOP SEARCH BAR */
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: min(550px, 55%);
+            background: #f3f3f6;
+            border-radius: 40px;
+            padding: 0 20px;
+            height: 62px;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 17px;
+            color: #333;
+        }
+
+        .search-box input::placeholder {
+            color: #777;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-actions button:not(.top-profile) {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #f0ecff;
+            cursor: pointer;
+            font-size: 19px;
+        }
+
+        .top-profile {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #6848ff;
+            color: white;
+            font-size: 21px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+
+        /* SEARCH PAGE */
+
+        .search-page {
+            padding: 30px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .search-page > h1 {
+            margin-bottom: 5px;
+        }
+
+        .search-description {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+
+        /* RESULT SECTIONS */
+
+        .search-section {
+            background: white;
+            border-radius: 22px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .search-section h2 {
+            margin: 0 0 18px;
+            font-size: 25px;
+            color: #292929;
+        }
+
+
+        /* RESULT CARDS */
+
+        .search-result {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-result:last-child {
+            border-bottom: none;
+        }
+
+        .result-avatar {
+            width: 55px;
+            height: 55px;
+            min-width: 55px;
+            border-radius: 50%;
+            background: #6848ff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .result-book {
+            width: 85px;
+            height: 105px;
+            min-width: 85px;
+            border-radius: 10px;
+            background: #eee9ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            overflow: hidden;
+        }
+
+        .result-book img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-info h3 {
+            margin: 0 0 5px;
+            font-size: 21px;
+            color: #222;
+        }
+
+        .result-info p {
+            margin: 5px 0;
+            color: #777;
+            font-size: 17px;
+        }
+
+        .result-button {
+            border: 1px solid #6848ff;
+            background: white;
+            color: #6848ff;
+            padding: 11px 22px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        .result-button:hover {
+            background: #f0ecff;
+        }
+
+
+        /* EMPTY RESULTS */
+
+        .empty-result {
+            text-align: center;
+            padding: 40px 10px;
+            color: #777;
+        }
+
+        .empty-result strong {
+            display: block;
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+
+        /* MOBILE RESPONSIVE */
+
+        @media (max-width: 768px) {
+
+            .topbar {
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .search-box {
+                width: auto;
+                flex: 1;
+                height: 48px;
+                padding: 0 12px;
+            }
+
+            .search-box input {
+                font-size: 14px;
+            }
+
+            .top-actions {
+                gap: 6px;
+            }
+
+            .top-actions button:not(.top-profile),
+            .top-profile {
+                width: 42px;
+                height: 42px;
+                font-size: 16px;
+            }
+
+            .search-page {
+                padding: 18px;
+            }
+
+            .search-section {
+                padding: 18px;
+            }
+
+            .search-result {
+                gap: 10px;
+            }
+
+            .result-book {
+                width: 60px;
+                height: 80px;
+                min-width: 60px;
+            }
+
+            .result-info h3 {
+                font-size: 16px;
+            }
+
+            .result-info p {
+                font-size: 13px;
+            }
+
+            .result-button {
+                padding: 8px 11px;
+                font-size: 13px;
+            }
+
+        }
+
+
+        @media (max-width: 400px) {
+
+            .top-actions {
+                gap: 4px;
+            }
+
+            .top-actions button:not(.top-profile),
+            .top-profile {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .search-box {
+                padding: 0 9px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Read<span>Live</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="home.html" class="side-link">
+                🏠
+                <span>Home</span>
+            </a>
+
+            <a href="books.html" class="side-link">
+                📚
+                <span>Books</span>
+            </a>
+
+            <a href="live-sessions.html" class="side-link">
+                🔴
+                <span>Live Sessions</span>
+            </a>
+
+            <a href="search.html" class="side-link active">
+                🔍
+                <span>Search</span>
+            </a>
+
+            <a href="notifications.html" class="side-link">
+                🔔
+                <span>Notifications</span>
+            </a>
+
+            <a href="profile.html" class="side-link">
+                👤
+                <span>Profile</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>© 2026 ReadLive</p>
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN AREA -->
+
+    <div class="main-area">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+
+            <!-- SINGLE SEARCH BAR -->
+
+            <div class="search-box">
+
+                🔍
+
+                <input
+                    type="text"
+                    id="topSearch"
+                    placeholder="Search books, users..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- RIGHT BUTTONS -->
+
+            <div class="top-actions">
+
+                <button
+                    type="button"
+                    onclick="openNotifications()"
+                    title="Notifications">
+
+                    🔔
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="openMessages()"
+                    title="Messages">
+
+                    💬
+
+                </button>
+
+                <button
+                    type="button"
+                    class="top-profile"
+                    id="topProfile"
+                    onclick="openProfile()">
+
+                    U
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- SEARCH CONTENT -->
+
+        <main class="search-page">
+
+
+            <h1>Search</h1>
+
+            <p class="search-description">
+                Search books and ReadLive users.
+            </p>
+
+
+            <!-- BOOK RESULTS -->
+
+            <section class="search-section">
+
+                <h2>📚 Books</h2>
+
+                <div id="bookResults"></div>
+
+            </section>
+
+
+            <!-- USER RESULTS -->
+
+            <section class="search-section">
+
+                <h2>👤 Users</h2>
+
+                <div id="userResults"></div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+
+        // GET CURRENT USER
+
+        function getCurrentUser() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem("readliveCurrentUser")
+                ) || null;
+
+            } catch (error) {
+
+                return null;
+
+            }
+
+        }
+
+
+
+        // GET BOOKS
+
+        function getBooks() {
+
+            try {
+
+                const books = JSON.parse(
+                    localStorage.getItem("readliveBooks")
+                );
+
+                return Array.isArray(books) ? books : [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+
+        // GET USERS
+
+        function getUsers() {
+
+            try {
+
+                const users = JSON.parse(
+                    localStorage.getItem("readliveUsers")
+                );
+
+                return Array.isArray(users) ? users : [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+
+        // ESCAPE HTML
+
+        function escapeHTML(value) {
+
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+
+        // GET INITIAL
+
+        function getInitial(name) {
+
+            if (!name) {
+                return "U";
+            }
+
+            return String(name)
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+
+        // LOAD PROFILE INITIAL
+
+        function loadTopProfile() {
+
+            const user = getCurrentUser();
+
+            const profile = document.getElementById("topProfile");
+
+            if (!profile) return;
+
+            profile.innerText = user
+                ? getInitial(user.name || user.username)
+                : "U";
+
+        }
+
+
+
+        // PERFORM SEARCH
+
+        function performSearch() {
+
+            const input = document.getElementById("topSearch");
+
+            const query = input.value.trim().toLowerCase();
+
+            if (query) {
+
+                window.history.replaceState(
+                    {},
+                    "",
+                    "search.html?query=" + encodeURIComponent(query)
+                );
+
+            } else {
+
+                window.history.replaceState(
+                    {},
+                    "",
+                    "search.html"
+                );
+
+            }
+
+            renderBooks(query);
+
+            renderUsers(query);
+
+        }
+
+
+
+        // RENDER BOOKS
+
+        function renderBooks(query) {
+
+            const container = document.getElementById("bookResults");
+
+            const books = getBooks();
+
+            if (books.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty-result">
+
+                        <strong>No books available</strong>
+
+                        Books added by the administrator
+                        will appear here.
+
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            const results = books.filter(function(book) {
+
+                const searchableText = [
+
+                    book.title,
+                    book.author,
+                    book.category,
+                    book.description
+
+                ].filter(Boolean).join(" ").toLowerCase();
+
+                return searchableText.includes(query);
+
+            });
+
+
+            if (results.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty-result">
+
+                        <strong>No books found</strong>
+
+                        Try another book title,
+                        author or category.
+
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            let html = "";
+
+            results.forEach(function(book) {
+
+                const title = book.title || "Untitled Book";
+
+                const author = book.author || "Unknown Author";
+
+                const category = book.category || "Book";
+
+                const image = book.image || "";
+
+                html += `
+
+                    <div class="search-result">
+
+                        <div class="result-book">
+
+                            ${
+                                image
+                                ? `
+                                    <img
+                                        src="${escapeHTML(image)}"
+                                        alt="${escapeHTML(title)}"
+                                        onerror="this.style.display='none'; this.parentElement.innerHTML='📖';"
+                                    >
+                                `
+                                : "📖"
+                            }
+
+                        </div>
+
+                        <div class="result-info">
+
+                            <h3>
+                                ${escapeHTML(title)}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(author)}
+                            </p>
+
+                            <p>
+                                ${escapeHTML(category)}
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="result-button"
+                            data-book-id="${escapeHTML(book.id)}">
+
+                            Read
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            container.innerHTML = html;
+
+
+            container.querySelectorAll("[data-book-id]").forEach(
+                function(button) {
+
+                    button.addEventListener("click", function() {
+
+                        openBook(button.dataset.bookId);
+
+                    });
+
+                }
+            );
+
+        }
+
+
+
+        // RENDER USERS
+
+        function renderUsers(query) {
+
+            const container = document.getElementById("userResults");
+
+            const users = getUsers();
+
+            const currentUser = getCurrentUser();
+
+            const currentUsername = String(
+                currentUser?.username || ""
+            ).toLowerCase();
+
+
+            const results = users.filter(function(user) {
+
+                const username = String(
+                    user.username || ""
+                ).toLowerCase();
+
+                const name = String(
+                    user.name || user.fullName || ""
+                ).toLowerCase();
+
+
+                if (
+                    currentUsername &&
+                    username === currentUsername
+                ) {
+
+                    return false;
+
+                }
+
+
+                return (
+                    username.includes(query) ||
+                    name.includes(query)
+                );
+
+            });
+
+
+            if (results.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty-result">
+
+                        <strong>No users found</strong>
+
+                        Try another name or username.
+
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            let html = "";
+
+            results.forEach(function(user) {
+
+                const name =
+                    user.name ||
+                    user.fullName ||
+                    user.username ||
+                    "User";
+
+                const username = user.username || "user";
+
+                html += `
+
+                    <div class="search-result">
+
+                        <div class="result-avatar">
+
+                            ${escapeHTML(getInitial(name))}
+
+                        </div>
+
+                        <div class="result-info">
+
+                            <h3>
+                                ${escapeHTML(name)}
+                            </h3>
+
+                            <p>
+                                @${escapeHTML(username)}
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="result-button"
+                            data-username="${encodeURIComponent(username)}">
+
+                            View
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            container.innerHTML = html;
+
+
+            container.querySelectorAll("[data-username]").forEach(
+                function(button) {
+
+                    button.addEventListener("click", function() {
+
+                        viewUser(button.dataset.username);
+
+                    });
+
+                }
+            );
+
+        }
+
+
+
+        // OPEN BOOK
+
+        function openBook(bookId) {
+
+            const books = getBooks();
+
+            const selectedBook = books.find(function(book) {
+
+                return String(book.id) === String(bookId);
+
+            });
+
+
+            if (!selectedBook) {
+
+                alert("Book not found.");
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "readliveSelectedBook",
+                JSON.stringify(selectedBook)
+            );
+
+            window.location.href = "reader.html";
+
+        }
+
+
+
+        // VIEW USER
+
+        function viewUser(encodedUsername) {
+
+            const username = decodeURIComponent(encodedUsername);
+
+            const users = getUsers();
+
+            const selectedUser = users.find(function(user) {
+
+                return String(user.username || "").toLowerCase() ===
+                    username.toLowerCase();
+
+            });
+
+
+            if (!selectedUser) {
+
+                alert("User not found.");
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "readliveSelectedUser",
+                JSON.stringify(selectedUser)
+            );
+
+            window.location.href = "profile.html";
+
+        }
+
+
+
+        // OPEN PROFILE
+
+        function openProfile() {
+
+            window.location.href = "profile.html";
+
+        }
+
+
+
+        // OPEN NOTIFICATIONS
+
+        function openNotifications() {
+
+            window.location.href = "notifications.html";
+
+        }
+
+
+
+        // OPEN MESSAGES
+
+        function openMessages() {
+
+            window.location.href = "live-sessions.html";
+
+        }
+
+
+
+        // LOAD QUERY FROM URL
+
+        function loadQueryFromURL() {
+
+            const params = new URLSearchParams(
+                window.location.search
+            );
+
+            const query = params.get("query") || "";
+
+            document.getElementById("topSearch").value = query;
+
+            renderBooks(query.toLowerCase());
+
+            renderUsers(query.toLowerCase());
+
+        }
+
+
+
+        // INITIALIZE PAGE
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            loadTopProfile();
+
+            loadQueryFromURL();
+
+
+            const searchInput = document.getElementById("topSearch");
+
+
+            // SEARCH WHILE TYPING
+
+            searchInput.addEventListener("input", function() {
+
+                performSearch();
+
+            });
+
+
+            // SEARCH USING ENTER
+
+            searchInput.addEventListener("keydown", function(event) {
+
+                if (event.key === "Enter") {
+
+                    performSearch();
+
+                }
+
+            });
+
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>
+```

@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ReadLive - Home</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =========================================
+           HOME PAGE
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f6f4ff;
+            color: #222;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* =========================================
+           MAIN AREA
+        ========================================= */
+
+        .main-area {
+            margin-left: 220px;
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           TOP BAR
+        ========================================= */
+
+        .topbar {
+            height: 90px;
+            background: white;
+            border-bottom: 1px solid #e5e2ec;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px 0 52px;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+
+        .search-box {
+            width: 525px;
+            max-width: 55%;
+
+            height: 48px;
+
+            background: #f4f3f6;
+            border-radius: 28px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 18px;
+
+            color: #777;
+
+            cursor: text;
+        }
+
+
+        .search-box span {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+
+        .search-box input {
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            width: 100%;
+
+            font-size: 16px;
+
+            color: #333;
+        }
+
+
+        .search-box input::placeholder {
+            color: #777;
+        }
+
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+
+        .top-action {
+            width: 48px;
+            height: 48px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #f0ecff;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .top-action:hover {
+            background: #e6dfff;
+        }
+
+
+        .top-profile {
+            width: 50px;
+            height: 50px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #6848ff;
+            color: white;
+
+            font-size: 20px;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           LOGOUT
+        ========================================= */
+
+        .logout-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            border: none;
+            background: transparent;
+
+            color: #777;
+
+            padding: 12px 15px;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            text-align: left;
+        }
+
+
+        .logout-btn:hover {
+            background: #f5f1ff;
+            color: #6848ff;
+        }
+
+
+        /* =========================================
+           HOME CONTENT
+        ========================================= */
+
+        .home-content {
+            padding: 28px 28px 50px;
+        }
+
+
+        .home-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                340px;
+
+            gap: 28px;
+
+            align-items: start;
+        }
+
+
+        .left-column,
+        .right-column {
+            min-width: 0;
+        }
+
+
+        /* =========================================
+           COMMON CARD
+        ========================================= */
+
+        .home-card {
+            background: white;
+
+            border: 1px solid #e7e4ed;
+
+            border-radius: 22px;
+
+            box-shadow: 0 2px 10px rgba(70, 50, 120, 0.03);
+
+            overflow: hidden;
+        }
+
+
+        /* =========================================
+           STORIES
+        ========================================= */
+
+        .stories-card {
+            padding: 28px 28px 20px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+        }
+
+
+        .section-header h2 {
+            margin: 0;
+
+            font-size: 26px;
+
+            color: #222;
+        }
+
+
+        .view-all {
+            color: #6848ff;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            font-size: 15px;
+
+            cursor: pointer;
+        }
+
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+
+        .stories-scroll {
+            display: flex;
+
+            gap: 22px;
+
+            overflow-x: auto;
+
+            padding: 3px 2px 12px;
+
+            scrollbar-width: thin;
+        }
+
+
+        .stories-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+
+        .stories-scroll::-webkit-scrollbar-thumb {
+            background: #aaa;
+            border-radius: 10px;
+        }
+
+
+        .story-item {
+            flex: 0 0 78px;
+
+            text-align: center;
+
+            cursor: pointer;
+        }
+
+
+        .story-circle {
+            width: 78px;
+            height: 78px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: auto;
+
+            background: #6848ff;
+
+            color: white;
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            border: 3px solid #6848ff;
+
+            position: relative;
+        }
+
+
+        .story-circle.add-story {
+            background: #f7f4ff;
+
+            color: #6848ff;
+
+            border: 3px dashed #6848ff;
+        }
+
+
+        .story-plus {
+            position: absolute;
+
+            right: -2px;
+            bottom: -2px;
+
+            width: 25px;
+            height: 25px;
+
+            background: #6848ff;
+
+            color: white;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 2px solid white;
+
+            font-size: 18px;
+        }
+
+
+        .story-name {
+            margin-top: 9px;
+
+            font-size: 13px;
+
+            color: #555;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        /* =========================================
+           WELCOME BANNER
+        ========================================= */
+
+        .welcome-card {
+            background:
+                linear-gradient(
+                    110deg,
+                    #e7dcff,
+                    #f3efff
+                );
+
+            border-radius: 22px;
+
+            padding: 38px 44px;
+
+            margin-bottom: 28px;
+
+            min-height: 255px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            overflow: hidden;
+        }
+
+
+        .welcome-content {
+            max-width: 670px;
+        }
+
+
+        .welcome-content h1 {
+            margin: 0 0 18px;
+
+            font-size: 39px;
+
+            line-height: 1.08;
+
+            color: #222;
+        }
+
+
+        .welcome-content p {
+            margin: 0 0 25px;
+
+            color: #666;
+
+            font-size: 17px;
+
+            line-height: 1.6;
+        }
+
+
+        .welcome-buttons {
+            display: flex;
+
+            gap: 18px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .primary-button,
+        .secondary-button {
+            padding: 13px 21px;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            display: inline-block;
+        }
+
+
+        .primary-button {
+            background: #6848ff;
+
+            color: white;
+
+            border: 1px solid #6848ff;
+        }
+
+
+        .primary-button:hover {
+            background: #5739e8;
+        }
+
+
+        .secondary-button {
+            background: white;
+
+            color: #6848ff;
+
+            border: 1px solid #6848ff;
+        }
+
+
+        .secondary-button:hover {
+            background: #f4f0ff;
+        }
+
+
+        .books-illustration {
+            width: 145px;
+            height: 125px;
+
+            position: relative;
+
+            margin-right: 25px;
+        }
+
+
+        .book-shape {
+            position: absolute;
+
+            width: 72px;
+            height: 82px;
+
+            border-radius: 4px;
+
+            transform: rotate(0deg);
+
+            box-shadow: 0 4px 5px rgba(0,0,0,0.08);
+        }
+
+
+        .book-one {
+            background: #8bdd57;
+
+            left: 15px;
+            top: 10px;
+        }
+
+
+        .book-two {
+            background: #e92e6e;
+
+            left: 42px;
+            top: 25px;
+        }
+
+
+        .book-three {
+            background: #49bce9;
+
+            left: 69px;
+            top: 42px;
+        }
+
+
+        /* =========================================
+           FEED TABS
+        ========================================= */
+
+        .feed-tabs {
+            display: flex;
+
+            gap: 45px;
+
+            border-bottom: 1px solid #ddd;
+
+            margin-bottom: 12px;
+        }
+
+
+        .feed-tab {
+            border: none;
+
+            background: transparent;
+
+            padding: 0 8px 15px;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            color: #888;
+
+            cursor: pointer;
+
+            position: relative;
+        }
+
+
+        .feed-tab.active {
+            color: #6848ff;
+        }
+
+
+        .feed-tab.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            bottom: -1px;
+
+            height: 3px;
+
+            background: #6848ff;
+
+            border-radius: 3px;
+        }
+
+
+        /* =========================================
+           FEED
+        ========================================= */
+
+        #feedContainer {
+            min-height: 100px;
+        }
+
+
+        .feed-post {
+            background: white;
+
+            border: 1px solid #e7e4ed;
+
+            border-radius: 22px;
+
+            padding: 28px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .post-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+
+        .post-user {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .avatar {
+            width: 62px;
+            height: 62px;
+
+            border-radius: 50%;
+
+            background: #6848ff;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+
+            font-weight: 700;
+
+            flex-shrink: 0;
+        }
+
+
+        .post-user-info h3 {
+            margin: 0 0 5px;
+
+            font-size: 18px;
+        }
+
+
+        .post-user-info p {
+            margin: 0;
+
+            color: #888;
+
+            font-size: 14px;
+        }
+
+
+        .follow-button {
+            border: 1px solid #6848ff;
+
+            background: white;
+
+            color: #6848ff;
+
+            padding: 10px 19px;
+
+            border-radius: 9px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .follow-button.following {
+            background: #6848ff;
+
+            color: white;
+        }
+
+
+        .post-text {
+            font-size: 17px;
+
+            line-height: 1.55;
+
+            margin: 0 0 22px;
+
+            color: #333;
+        }
+
+
+        .book-post {
+            background: #f6f3ff;
+
+            border-radius: 16px;
+
+            padding: 23px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 22px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .book-post-cover {
+            width: 83px;
+            height: 105px;
+
+            border-radius: 8px;
+
+            background: #ddd7ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+
+            flex-shrink: 0;
+
+            font-size: 30px;
+        }
+
+
+        .book-post-cover img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+
+        .book-post-info h3 {
+            margin: 0 0 7px;
+
+            font-size: 20px;
+        }
+
+
+        .book-post-info p {
+            margin: 0;
+
+            color: #777;
+
+            font-size: 16px;
+        }
+
+
+        .post-actions {
+            display: flex;
+
+            gap: 25px;
+
+            color: #777;
+
+            font-size: 15px;
+        }
+
+
+        .post-action {
+            cursor: pointer;
+
+            border: none;
+
+            background: transparent;
+
+            color: #777;
+
+            font-size: 15px;
+        }
+
+
+        .post-action:hover {
+            color: #6848ff;
+        }
+
+
+        /* =========================================
+           RIGHT COLUMN
+        ========================================= */
+
+        .right-card {
+            background: white;
+
+            border: 1px solid #e7e4ed;
+
+            border-radius: 22px;
+
+            padding: 25px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .right-card-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 24px;
+        }
+
+
+        .right-card-header h2 {
+            margin: 0;
+
+            font-size: 22px;
+        }
+
+
+        /* =========================================
+           SUGGESTED PEOPLE
+        ========================================= */
+
+        .person-row {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 10px 0;
+
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .person-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .person-avatar {
+            width: 54px;
+            height: 54px;
+
+            border-radius: 50%;
+
+            background: #6848ff;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+
+            font-size: 20px;
+
+            flex-shrink: 0;
+        }
+
+
+        .person-info {
+            flex: 1;
+
+            min-width: 0;
+        }
+
+
+        .person-info h3 {
+            margin: 0 0 4px;
+
+            font-size: 16px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        .person-info p {
+            margin: 0;
+
+            color: #888;
+
+            font-size: 13px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        .small-follow {
+            border: none;
+
+            background: #6848ff;
+
+            color: white;
+
+            border-radius: 8px;
+
+            padding: 9px 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .small-follow.following {
+            background: #eee9ff;
+
+            color: #6848ff;
+        }
+
+
+        /* =========================================
+           UPCOMING LIVE
+        ========================================= */
+
+        .live-row {
+            display: grid;
+
+            grid-template-columns: 54px minmax(0, 1fr) auto;
+
+            gap: 12px;
+
+            align-items: center;
+
+            padding: 14px 0;
+
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .live-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .live-icon {
+            width: 54px;
+            height: 54px;
+
+            border-radius: 13px;
+
+            background: #eee9ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+        }
+
+
+        .live-info {
+            min-width: 0;
+        }
+
+
+        .live-info h3 {
+            margin: 0 0 5px;
+
+            font-size: 15px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        .live-info p {
+            margin: 0;
+
+            color: #888;
+
+            font-size: 12px;
+        }
+
+
+        .join-button {
+            border: none;
+
+            background: #6848ff;
+
+            color: white;
+
+            border-radius: 8px;
+
+            padding: 9px 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           PROFILE CARD
+        ========================================= */
+
+        .mini-profile {
+            text-align: center;
+        }
+
+
+        .mini-profile-avatar {
+            width: 82px;
+            height: 82px;
+
+            border-radius: 50%;
+
+            background: #6848ff;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 15px;
+
+            font-size: 31px;
+
+            font-weight: 700;
+        }
+
+
+        .mini-profile h3 {
+            margin: 0 0 5px;
+
+            font-size: 19px;
+        }
+
+
+        .mini-profile p {
+            margin: 0 0 20px;
+
+            color: #888;
+        }
+
+
+        .view-profile-button {
+            width: 100%;
+
+            background: white;
+
+            border: 1px solid #6848ff;
+
+            color: #6848ff;
+
+            padding: 11px;
+
+            border-radius: 9px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .view-profile-button:hover {
+            background: #f5f1ff;
+        }
+
+
+        /* =========================================
+           EMPTY STATES
+        ========================================= */
+
+        .empty-state {
+            text-align: center;
+
+            padding: 35px 15px;
+
+            color: #888;
+        }
+
+
+        .empty-state strong {
+            display: block;
+
+            color: #333;
+
+            font-size: 17px;
+
+            margin-bottom: 7px;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 1100px) {
+
+            .home-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .right-column {
+                display: grid;
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+
+                gap: 20px;
+            }
+
+
+            .right-card {
+                margin-bottom: 0;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .main-area {
+                margin-left: 65px;
+            }
+
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+
+            .search-box {
+                max-width: 60%;
+
+                width: 400px;
+            }
+
+
+            .home-content {
+                padding: 18px;
+            }
+
+
+            .right-column {
+                display: block;
+            }
+
+
+            .right-card {
+                margin-bottom: 20px;
+            }
+
+
+            .welcome-card {
+                padding: 28px;
+
+                min-height: auto;
+            }
+
+
+            .books-illustration {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .topbar {
+                height: 72px;
+            }
+
+
+            .search-box {
+                height: 42px;
+
+                max-width: 65%;
+            }
+
+
+            .top-action {
+                width: 40px;
+                height: 40px;
+            }
+
+
+            .top-profile {
+                width: 42px;
+                height: 42px;
+            }
+
+
+            .top-actions {
+                gap: 7px;
+            }
+
+
+            .welcome-content h1 {
+                font-size: 29px;
+            }
+
+
+            .welcome-content p {
+                font-size: 15px;
+            }
+
+
+            .stories-card,
+            .right-card,
+            .feed-post {
+                padding: 20px;
+            }
+
+
+            .book-post {
+                padding: 15px;
+            }
+
+
+            .book-post-cover {
+                width: 65px;
+                height: 85px;
+            }
+
+
+            .feed-tabs {
+                gap: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Read<span>Live</span>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="home.html"
+                class="side-link active"
+            >
+                🏠
+                <span>Home</span>
+            </a>
+
+
+            <a
+                href="books.html"
+                class="side-link"
+            >
+                📚
+                <span>Books</span>
+            </a>
+
+
+            <a
+                href="live-sessions.html"
+                class="side-link"
+            >
+                🔴
+                <span>Live Sessions</span>
+            </a>
+
+
+            <a
+                href="search.html"
+                class="side-link"
+            >
+                🔍
+                <span>Search</span>
+            </a>
+
+
+            <a
+                href="notifications.html"
+                class="side-link"
+            >
+                🔔
+                <span>Notifications</span>
+            </a>
+
+
+            <a
+                href="profile.html"
+                class="side-link"
+            >
+                👤
+                <span>Profile</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                type="button"
+                class="logout-btn"
+                onclick="logoutUser()"
+            >
+                🚪 <span>Logout</span>
+            </button>
+
+            <p>© 2026 ReadLive</p>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <div class="main-area">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+
+            <div
+                class="search-box"
+                onclick="focusTopSearch()"
+            >
+
+                <span>🔍</span>
+
+                <input
+                    type="text"
+                    id="topSearch"
+                    placeholder="Search books, users..."
+                    onkeydown="handleTopSearch(event)"
+                >
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="top-action"
+                    type="button"
+                    onclick="openNotifications()"
+                >
+                    🔔
+                </button>
+
+
+                <button
+                    class="top-action"
+                    type="button"
+                    onclick="openLiveSessions()"
+                >
+                    💬
+                </button>
+
+
+                <button
+                    class="top-profile"
+                    type="button"
+                    id="topProfile"
+                    onclick="openProfile()"
+                >
+                    U
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================
+             HOME CONTENT
+        ========================================== -->
+
+        <main class="home-content">
+
+
+            <div class="home-grid">
+
+
+                <!-- =================================
+                     LEFT COLUMN
+                ================================== -->
+
+                <div class="left-column">
+
+
+                    <!-- STORIES -->
+
+                    <section class="stories-card home-card">
+
+
+                        <div class="section-header">
+
+                            <h2>
+                                Stories
+                            </h2>
+
+
+                            <a
+                                href="stories.html"
+                                class="view-all"
+                            >
+                                View All
+                            </a>
+
+                        </div>
+
+
+                        <div
+                            class="stories-scroll"
+                            id="homeStoriesContainer"
+                        >
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- WELCOME -->
+
+                    <section class="welcome-card">
+
+
+                        <div class="welcome-content">
+
+                            <h1>
+                                Read. Learn.<br>
+                                Connect. Live.
+                            </h1>
+
+
+                            <p>
+                                Your all-in-one platform for
+                                reading, learning and connecting
+                                with fellow readers.
+                            </p>
+
+
+                            <div class="welcome-buttons">
+
+                                <a
+                                    href="live-sessions.html"
+                                    class="primary-button"
+                                >
+                                    Join Live Session
+                                </a>
+
+
+                                <a
+                                    href="books.html"
+                                    class="secondary-button"
+                                >
+                                    Explore Books
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="books-illustration">
+
+                            <div class="book-shape book-one"></div>
+
+                            <div class="book-shape book-two"></div>
+
+                            <div class="book-shape book-three"></div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- FEED TABS -->
+
+                    <div class="feed-tabs">
+
+                        <button
+                            class="feed-tab active"
+                            id="forYouTab"
+                            onclick="showFeed('forYou')"
+                        >
+                            For You
+                        </button>
+
+
+                        <button
+                            class="feed-tab"
+                            id="followingTab"
+                            onclick="showFeed('following')"
+                        >
+                            Following
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- FEED -->
+
+                    <div id="feedContainer">
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================
+                     RIGHT COLUMN
+                ================================== -->
+
+                <aside class="right-column">
+
+
+                    <!-- SUGGESTED PEOPLE -->
+
+                    <section class="right-card">
+
+
+                        <div class="right-card-header">
+
+                            <h2>
+                                Suggested People
+                            </h2>
+
+
+                            <a
+                                href="search.html"
+                                class="view-all"
+                            >
+                                View All
+                            </a>
+
+                        </div>
+
+
+                        <div
+                            id="suggestedPeople"
+                        >
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- UPCOMING LIVE -->
+
+                    <section class="right-card">
+
+
+                        <div class="right-card-header">
+
+                            <h2>
+                                Upcoming Live Sessions
+                            </h2>
+
+
+                            <a
+                                href="live-sessions.html"
+                                class="view-all"
+                            >
+                                View All
+                            </a>
+
+                        </div>
+
+
+                        <div
+                            id="upcomingSessions"
+                        >
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- PROFILE -->
+
+                    <section class="right-card mini-profile">
+
+
+                        <div
+                            class="mini-profile-avatar"
+                            id="miniProfileAvatar"
+                        >
+                            U
+                        </div>
+
+
+                        <h3 id="miniProfileName">
+                            User
+                        </h3>
+
+
+                        <p id="miniProfileUsername">
+                            @user
+                        </p>
+
+
+                        <button
+                            class="view-profile-button"
+                            type="button"
+                            onclick="openProfile()"
+                        >
+                            View Profile
+                        </button>
+
+                    </section>
+
+
+                </aside>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+
+        /* =========================================
+           BASIC HELPERS
+        ========================================= */
+
+        function escapeHTML(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+                return "";
+            }
+
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        function getInitial(name) {
+
+            if (!name) {
+                return "U";
+            }
+
+
+            return String(name)
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+        function getCurrentUser() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readliveCurrentUser"
+                    )
+                ) || null;
+
+            } catch (error) {
+
+                return null;
+
+            }
+
+        }
+
+
+        function getUsers() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readliveUsers"
+                    )
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function getBooks() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readliveBooks"
+                    )
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function getStories() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readliveStories"
+                    )
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function getLiveSessions() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readliveLiveSessions"
+                    )
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function getFollowing() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readliveFollowing"
+                    )
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function saveFollowing(following) {
+
+            localStorage.setItem(
+                "readliveFollowing",
+                JSON.stringify(following)
+            );
+
+        }
+
+
+
+        /* =========================================
+           CURRENT USER
+        ========================================== */
+
+        function loadCurrentUser() {
+
+            const user =
+                getCurrentUser();
+
+
+            const topProfile =
+                document.getElementById(
+                    "topProfile"
+                );
+
+
+            const miniAvatar =
+                document.getElementById(
+                    "miniProfileAvatar"
+                );
+
+
+            const miniName =
+                document.getElementById(
+                    "miniProfileName"
+                );
+
+
+            const miniUsername =
+                document.getElementById(
+                    "miniProfileUsername"
+                );
+
+
+            if (!user) {
+
+                topProfile.innerText = "U";
+
+                miniAvatar.innerText = "U";
+
+                miniName.innerText = "User";
+
+                miniUsername.innerText = "@user";
+
+                return;
+
+            }
+
+
+            const name =
+                user.name ||
+                user.fullName ||
+                user.username ||
+                "User";
+
+
+            const username =
+                user.username ||
+                "user";
+
+
+            const initial =
+                getInitial(name);
+
+
+            topProfile.innerText =
+                initial;
+
+
+            miniAvatar.innerText =
+                initial;
+
+
+            miniName.innerText =
+                name;
+
+
+            miniUsername.innerText =
+                "@" + username;
+
+        }
+
+
+
+        /* =========================================
+           STORIES
+        ========================================== */
+
+        function renderHomeStories() {
+
+            const container =
+                document.getElementById(
+                    "homeStoriesContainer"
+                );
+
+
+            const currentUser =
+                getCurrentUser();
+
+
+            const stories =
+                getStories();
+
+
+            let html = "";
+
+
+            let myStories = [];
+
+
+            if (currentUser) {
+
+                myStories =
+                    stories.filter(function(story) {
+
+                        return String(
+                            story.username || ""
+                        ).toLowerCase() ===
+                        String(
+                            currentUser.username || ""
+                        ).toLowerCase();
+
+                    });
+
+            }
+
+
+            if (myStories.length > 0) {
+
+                html += `
+
+                    <div
+                        class="story-item"
+                        onclick="openMyStory()"
+                    >
+
+                        <div class="story-circle">
+
+                            ${escapeHTML(
+                                getInitial(
+                                    currentUser.name ||
+                                    currentUser.username
+                                )
+                            )}
+
+                        </div>
+
+                        <div class="story-name">
+                            Your Story
+                        </div>
+
+                    </div>
+
+                `;
+
+            } else {
+
+                html += `
+
+                    <div
+                        class="story-item"
+                        onclick="addStory()"
+                    >
+
+                        <div class="story-circle add-story">
+
+                            +
+
+                        </div>
+
+                        <div class="story-name">
+                            Add Story
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            const otherStories =
+                stories.filter(function(story) {
+
+                    if (!currentUser) {
+                        return true;
+                    }
+
+
+                    return String(
+                        story.username || ""
+                    ).toLowerCase() !==
+                    String(
+                        currentUser.username || ""
+                    ).toLowerCase();
+
+                });
+
+
+            const uniqueUsers = [];
+
+
+            otherStories.forEach(function(story) {
+
+                const username =
+                    String(
+                        story.username ||
+                        story.user ||
+                        ""
+                    );
+
+
+                if (
+                    !uniqueUsers.includes(
+                        username.toLowerCase()
+                    )
+                ) {
+
+                    uniqueUsers.push(
+                        username.toLowerCase()
+                    );
+
+
+                    html += `
+
+                        <div
+                            class="story-item"
+                            onclick="openStory('${escapeHTML(username)}')"
+                        >
+
+                            <div class="story-circle">
+
+                                ${escapeHTML(
+                                    getInitial(
+                                        story.user ||
+                                        story.username
+                                    )
+                                )}
+
+                            </div>
+
+
+                            <div class="story-name">
+
+                                ${escapeHTML(
+                                    story.user ||
+                                    story.username ||
+                                    "User"
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+            });
+
+
+            if (
+                stories.length === 0 &&
+                currentUser
+            ) {
+
+                html += `
+
+                    <div
+                        class="story-item"
+                        onclick="addStory()"
+                    >
+
+                        <div class="story-circle">
+
+                            R
+
+                        </div>
+
+                        <div class="story-name">
+                            Start Reading
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            container.innerHTML =
+                html;
+
+        }
+
+
+
+        function addStory() {
+
+            window.location.href =
+                "add-story.html";
+
+        }
+
+
+        function openMyStory() {
+
+            const currentUser =
+                getCurrentUser();
+
+
+            if (!currentUser) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const stories =
+                getStories();
+
+
+            const myStories =
+                stories.filter(function(story) {
+
+                    return String(
+                        story.username || ""
+                    ).toLowerCase() ===
+                    String(
+                        currentUser.username || ""
+                    ).toLowerCase();
+
+                });
+
+
+            if (myStories.length === 0) {
+
+                addStory();
+
+                return;
+
+            }
+
+
+            const latestStory =
+                myStories[
+                    myStories.length - 1
+                ];
+
+
+            localStorage.setItem(
+                "readliveSelectedStory",
+                JSON.stringify(
+                    latestStory
+                )
+            );
+
+
+            window.location.href =
+                "story-viewer.html";
+
+        }
+
+
+        function openStory(username) {
+
+            const stories =
+                getStories();
+
+
+            const selectedStory =
+                stories.find(function(story) {
+
+                    return String(
+                        story.username ||
+                        story.user ||
+                        ""
+                    ).toLowerCase() ===
+                    String(
+                        username
+                    ).toLowerCase();
+
+                });
+
+
+            if (!selectedStory) {
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "readliveSelectedStory",
+                JSON.stringify(
+                    selectedStory
+                )
+            );
+
+
+            window.location.href =
+                "story-viewer.html";
+
+        }
+
+
+
+        /* =========================================
+           SUGGESTED PEOPLE
+        ========================================== */
+
+        function renderSuggestedPeople() {
+
+            const container =
+                document.getElementById(
+                    "suggestedPeople"
+                );
+
+
+            const currentUser =
+                getCurrentUser();
+
+
+            const users =
+                getUsers();
+
+
+            const following =
+                getFollowing();
+
+
+            const currentUsername =
+                currentUser
+                    ? String(
+                        currentUser.username || ""
+                    ).toLowerCase()
+                    : "";
+
+
+            const availableUsers =
+                users.filter(function(user) {
+
+                    return String(
+                        user.username || ""
+                    ).toLowerCase() !==
+                    currentUsername;
+
+                });
+
+
+            if (availableUsers.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <strong>
+                            No suggestions yet
+                        </strong>
+
+                        Other registered users
+                        will appear here.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const people =
+                availableUsers.slice(0, 5);
+
+
+            let html = "";
+
+
+            people.forEach(function(user) {
+
+                const name =
+                    user.name ||
+                    user.fullName ||
+                    user.username ||
+                    "User";
+
+
+                const username =
+                    user.username ||
+                    "user";
+
+
+                const isFollowing =
+                    following.some(function(item) {
+
+                        return String(item)
+                            .toLowerCase() ===
+                            String(username)
+                                .toLowerCase();
+
+                    });
+
+
+                html += `
+
+                    <div class="person-row">
+
+                        <div class="person-avatar">
+
+                            ${escapeHTML(
+                                getInitial(name)
+                            )}
+
+                        </div>
+
+
+                        <div class="person-info">
+
+                            <h3>
+                                ${escapeHTML(name)}
+                            </h3>
+
+                            <p>
+                                @${escapeHTML(username)}
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="small-follow ${
+                                isFollowing
+                                    ? "following"
+                                    : ""
+                            }"
+                            onclick="toggleFollow(
+                                '${escapeHTML(username)}'
+                            )"
+                        >
+
+                            ${
+                                isFollowing
+                                    ? "Following"
+                                    : "Follow"
+                            }
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            container.innerHTML =
+                html;
+
+        }
+
+
+
+        /* =========================================
+           FOLLOW / UNFOLLOW
+        ========================================== */
+
+        function toggleFollow(username) {
+
+            let following =
+                getFollowing();
+
+
+            const index =
+                following.findIndex(function(item) {
+
+                    return String(item)
+                        .toLowerCase() ===
+                        String(username)
+                            .toLowerCase();
+
+                });
+
+
+            if (index === -1) {
+
+                following.push(username);
+
+            } else {
+
+                following.splice(
+                    index,
+                    1
+                );
+
+            }
+
+
+            saveFollowing(
+                following
+            );
+
+
+            renderSuggestedPeople();
+
+            renderFeed();
+
+        }
+
+
+
+        /* =========================================
+           LIVE SESSIONS
+        ========================================== */
+
+        function renderUpcomingSessions() {
+
+            const container =
+                document.getElementById(
+                    "upcomingSessions"
+                );
+
+
+            const sessions =
+                getLiveSessions();
+
+
+            if (sessions.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <strong>
+                            No live sessions yet
+                        </strong>
+
+                        Start a live reading session
+                        from a book.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const visibleSessions =
+                sessions
+                    .filter(function(session) {
+
+                        return (
+                            session.status === "live" ||
+                            session.status === "upcoming" ||
+                            !session.status
+                        );
+
+                    })
+                    .slice(-4)
+                    .reverse();
+
+
+            if (visibleSessions.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <strong>
+                            No live sessions
+                        </strong>
+
+                        Check Live Sessions for
+                        upcoming events.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            let html = "";
+
+
+            visibleSessions.forEach(function(session) {
+
+                const title =
+                    session.title ||
+                    "Live Reading";
+
+
+                const host =
+                    session.host ||
+                    "User";
+
+
+                const time =
+                    session.time ||
+                    "";
+
+
+                html += `
+
+                    <div class="live-row">
+
+                        <div class="live-icon">
+                            🔴
+                        </div>
+
+
+                        <div class="live-info">
+
+                            <h3>
+                                ${escapeHTML(title)}
+                            </h3>
+
+
+                            <p>
+                                ${escapeHTML(host)}
+                                ${
+                                    time
+                                        ? " · " +
+                                          escapeHTML(time)
+                                        : ""
+                                }
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="join-button"
+                            onclick="joinLiveSession(
+                                '${String(
+                                    session.id || ""
+                                ).replace(
+                                    /'/g,
+                                    "\\'"
+                                )}'
+                            )"
+                        >
+                            Join
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+
+            container.innerHTML =
+                html;
+
+        }
+
+
+
+        function joinLiveSession(sessionId) {
+
+            const sessions =
+                getLiveSessions();
+
+
+            const session =
+                sessions.find(function(item) {
+
+                    return String(
+                        item.id
+                    ) ===
+                    String(
+                        sessionId
+                    );
+
+                });
+
+
+            if (!session) {
+
+                alert(
+                    "Live session not found."
+                );
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "readliveCurrentLiveSession",
+                JSON.stringify(session)
+            );
+
+
+            window.location.href =
+                "live-room.html";
+
+        }
+
+
+
+        /* =========================================
+           FEED
+        ========================================== */
+
+        let currentFeed =
+            "forYou";
+
+
+        function getPosts() {
+
+            try {
+
+                return JSON.parse(
+                    localStorage.getItem(
+                        "readlivePosts"
+                    )
+                ) || [];
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function renderFeed() {
+
+            const container =
+                document.getElementById(
+                    "feedContainer"
+                );
+
+
+            const posts =
+                getPosts();
+
+
+            const currentUser =
+                getCurrentUser();
+
+
+            const following =
+                getFollowing();
+
+
+            let visiblePosts =
+                posts;
+
+
+            if (
+                currentFeed ===
+                "following"
+            ) {
+
+                visiblePosts =
+                    posts.filter(function(post) {
+
+                        const username =
+                            String(
+                                post.username ||
+                                ""
+                            ).toLowerCase();
+
+
+                        return following.some(
+                            function(item) {
+
+                                return String(item)
+                                    .toLowerCase() ===
+                                    username;
+
+                            }
+                        );
+
+                    });
+
+            }
+
+
+            if (
+                visiblePosts.length === 0
+            ) {
+
+                if (
+                    currentFeed ===
+                    "following"
+                ) {
+
+                    container.innerHTML = `
+
+                        <div class="feed-post">
+
+                            <div class="empty-state">
+
+                                <strong>
+                                    You are not following anyone yet
+                                </strong>
+
+                                Follow people from
+                                Suggested People to see
+                                their posts here.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                } else {
+
+                    container.innerHTML = `
+
+                        <div class="feed-post">
+
+                            <div class="empty-state">
+
+                                <strong>
+                                    Your feed is empty
+                                </strong>
+
+                                Posts from ReadLive users
+                                will appear here.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+                return;
+
+            }
+
+
+            let html = "";
+
+
+            visiblePosts.forEach(function(post) {
+
+                const name =
+                    post.name ||
+                    post.user ||
+                    post.username ||
+                    "User";
+
+
+                const username =
+                    post.username ||
+                    "user";
+
+
+                const text =
+                    post.text ||
+                    post.content ||
+                    "";
+
+
+                const book =
+                    post.book ||
+                    null;
+
+
+                const isFollowing =
+                    following.some(function(item) {
+
+                        return String(item)
+                            .toLowerCase() ===
+                            String(username)
+                                .toLowerCase();
+
+                    });
+
+
+                html += `
+
+                    <article class="feed-post">
+
+                        <div class="post-header">
+
+                            <div class="post-user">
+
+                                <div class="avatar">
+
+                                    ${escapeHTML(
+                                        getInitial(name)
+                                    )}
+
+                                </div>
+
+
+                                <div class="post-user-info">
+
+                                    <h3>
+                                        ${escapeHTML(name)}
+                                    </h3>
+
+
+                                    <p>
+                                        @${escapeHTML(username)}
+                                        ${
+                                            post.date
+                                                ? " · " +
+                                                  escapeHTML(
+                                                      post.date
+                                                  )
+                                                : ""
+                                        }
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            ${
+                                currentUser &&
+                                String(username).toLowerCase() !==
+                                String(
+                                    currentUser.username || ""
+                                ).toLowerCase()
+                                    ? `
+
+                                        <button
+                                            type="button"
+                                            class="follow-button ${
+                                                isFollowing
+                                                    ? "following"
+                                                    : ""
+                                            }"
+                                            onclick="toggleFollow(
+                                                '${escapeHTML(username)}'
+                                            )"
+                                        >
+
+                                            ${
+                                                isFollowing
+                                                    ? "Following"
+                                                    : "Follow"
+                                            }
+
+                                        </button>
+
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        <p class="post-text">
+
+                            ${escapeHTML(text)}
+
+                        </p>
+
+
+                        ${
+                            book
+                                ? `
+
+                                    <div class="book-post">
+
+                                        <div class="book-post-cover">
+
+                                            ${
+                                                book.image
+                                                    ? `<img
+                                                        src="${escapeHTML(
+                                                            book.image
+                                                        )}"
+                                                        alt="${escapeHTML(
+                                                            book.title || "Book"
+                                                        )}"
+                                                      >`
+                                                    : "📖"
+                                            }
+
+                                        </div>
+
+
+                                        <div class="book-post-info">
+
+                                            <h3>
+                                                ${escapeHTML(
+                                                    book.title ||
+                                                    "Book"
+                                                )}
+                                            </h3>
+
+
+                                            <p>
+                                                ${escapeHTML(
+                                                    book.author ||
+                                                    "Unknown Author"
+                                                )}
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                `
+                                : ""
+                        }
+
+
+                        <div class="post-actions">
+
+                            <button
+                                type="button"
+                                class="post-action"
+                                onclick="likePost('${String(
+                                    post.id || ""
+                                ).replace(
+                                    /'/g,
+                                    "\\'"
+                                )}')"
+                            >
+                                ♡ ${post.likes || 0}
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="post-action"
+                                onclick="commentPost()"
+                            >
+                                💬 ${post.comments || 0}
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="post-action"
+                                onclick="sharePost()"
+                            >
+                                ↗ Share
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            });
+
+
+            container.innerHTML =
+                html;
+
+        }
+
+
+
+        function showFeed(type) {
+
+            currentFeed =
+                type;
+
+
+            const forYouTab =
+                document.getElementById(
+                    "forYouTab"
+                );
+
+
+            const followingTab =
+                document.getElementById(
+                    "followingTab"
+                );
+
+
+            forYouTab.classList.remove(
+                "active"
+            );
+
+
+            followingTab.classList.remove(
+                "active"
+            );
+
+
+            if (type === "forYou") {
+
+                forYouTab.classList.add(
+                    "active"
+                );
+
+            } else {
+
+                followingTab.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            renderFeed();
+
+        }
+
+
+        function likePost(postId) {
+
+            const posts =
+                getPosts();
+
+
+            const post =
+                posts.find(function(item) {
+
+                    return String(item.id) ===
+                    String(postId);
+
+                });
+
+
+            if (!post) {
+                return;
+            }
+
+
+            post.likes =
+                Number(post.likes || 0) + 1;
+
+
+            localStorage.setItem(
+                "readlivePosts",
+                JSON.stringify(posts)
+            );
+
+
+            renderFeed();
+
+        }
+
+
+        function commentPost() {
+
+            alert(
+                "Comments will be connected with the backend later."
+            );
+
+        }
+
+
+        function sharePost() {
+
+            alert(
+                "Post sharing will be connected with the backend later."
+            );
+
+        }
+
+
+
+        /* =========================================
+           SEARCH
+        ========================================== */
+
+        function focusTopSearch() {
+
+            const input =
+                document.getElementById(
+                    "topSearch"
+                );
+
+
+            input.focus();
+
+        }
+
+
+        function handleTopSearch(event) {
+
+            if (
+                event.key !== "Enter"
+            ) {
+                return;
+            }
+
+
+            const value =
+                document.getElementById(
+                    "topSearch"
+                ).value.trim();
+
+
+            if (!value) {
+
+                window.location.href =
+                    "search.html";
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "search.html?query=" +
+                encodeURIComponent(
+                    value
+                );
+
+        }
+
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================== */
+
+        function openNotifications() {
+
+            window.location.href =
+                "notifications.html";
+
+        }
+
+
+        function openLiveSessions() {
+
+            window.location.href =
+                "live-sessions.html";
+
+        }
+
+
+        function openProfile() {
+
+            window.location.href =
+                "profile.html";
+
+        }
+
+
+
+        /* =========================================
+           INITIALIZE
+        ========================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                loadCurrentUser();
+
+                renderHomeStories();
+
+                renderSuggestedPeople();
+
+                renderUpcomingSessions();
+
+                renderFeed();
+
+            }
+        );
+
+
+
+        /* =========================================
+           LOGOUT
+        ========================================== */
+
+        function logoutUser() {
+
+            localStorage.removeItem(
+                "readliveCurrentUser"
+            );
+
+
+            localStorage.removeItem(
+                "readliveCurrentLiveSession"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

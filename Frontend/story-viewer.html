@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - Story</title>
+
+    <link rel="stylesheet" href="style.css">
+
+
+    <style>
+
+        /* =====================================
+           FULL STORY VIEWER
+        ===================================== */
+
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            background: #000;
+
+            overflow: hidden;
+
+        }
+
+
+        .story-viewer-page {
+
+            width: 100vw;
+
+            height: 100vh;
+
+            background: #000;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        /* =====================================
+           STORY SCREEN
+        ===================================== */
+
+        .story-screen {
+
+            position: relative;
+
+            width: 390px;
+
+            height: 680px;
+
+            max-width: 92vw;
+
+            max-height: 92vh;
+
+            overflow: hidden;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #32105f,
+                    #6c4ab6,
+                    #a855f7,
+                    #ec4899
+                );
+
+            box-shadow:
+                0 10px 50px
+                rgba(0, 0, 0, 0.6);
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        /* =====================================
+           PROGRESS BAR
+        ===================================== */
+
+        .story-progress {
+
+            position: absolute;
+
+            top: 12px;
+
+            left: 12px;
+
+            right: 12px;
+
+            height: 4px;
+
+            background:
+                rgba(255,255,255,0.35);
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            z-index: 10;
+
+        }
+
+
+        .story-progress-fill {
+
+            width: 100%;
+
+            height: 100%;
+
+            background: white;
+
+            border-radius: 10px;
+
+        }
+
+
+        /* =====================================
+           TOP USER AREA
+        ===================================== */
+
+        .story-top {
+
+            display: flex;
+
+            align-items: center;
+
+            padding:
+                30px
+                55px
+                15px
+                18px;
+
+            color: white;
+
+            z-index: 5;
+
+        }
+
+
+        .story-profile {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            color: #6c4ab6;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            margin-right: 10px;
+
+        }
+
+
+        .story-user-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .story-username {
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        .story-date {
+
+            font-size: 12px;
+
+            margin-top: 3px;
+
+            opacity: 0.8;
+
+        }
+
+
+        /* =====================================
+           CLOSE BUTTON
+        ===================================== */
+
+        .close-button {
+
+            position: absolute;
+
+            top: 24px;
+
+            right: 15px;
+
+            width: 38px;
+
+            height: 38px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0,0,0,0.3);
+
+            color: white;
+
+            font-size: 23px;
+
+            cursor: pointer;
+
+            z-index: 20;
+
+        }
+
+
+        .close-button:hover {
+
+            background:
+                rgba(0,0,0,0.55);
+
+        }
+
+
+        /* =====================================
+           STORY CONTENT
+        ===================================== */
+
+        .story-content {
+
+            flex: 1;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 35px;
+
+            box-sizing: border-box;
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+
+        .story-text {
+
+            font-size: 27px;
+
+            line-height: 1.5;
+
+            font-weight: 500;
+
+            white-space: pre-wrap;
+
+            word-break: break-word;
+
+            text-shadow:
+                0 2px 8px
+                rgba(0,0,0,0.35);
+
+        }
+
+
+        /* =====================================
+           BOTTOM
+        ===================================== */
+
+        .story-bottom {
+
+            text-align: center;
+
+            color:
+                rgba(255,255,255,0.8);
+
+            font-size: 13px;
+
+            padding: 18px;
+
+        }
+
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 600px) {
+
+            .story-screen {
+
+                width: 100vw;
+
+                height: 100vh;
+
+                max-width: 100vw;
+
+                max-height: 100vh;
+
+                border-radius: 0;
+
+            }
+
+
+            .story-text {
+
+                font-size: 24px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================
+         STORY VIEWER
+    ===================================== -->
+
+    <div class="story-viewer-page">
+
+
+        <div
+            class="story-screen"
+            id="storyScreen">
+
+
+            <!-- PROGRESS BAR -->
+
+            <div class="story-progress">
+
+                <div
+                    class="story-progress-fill">
+                </div>
+
+            </div>
+
+
+            <!-- USER INFORMATION -->
+
+            <div class="story-top">
+
+
+                <div
+                    class="story-profile"
+                    id="storyProfile">
+
+                    U
+
+                </div>
+
+
+                <div
+                    class="story-user-info">
+
+
+                    <div
+                        class="story-username"
+                        id="storyUsername">
+
+                        @user
+
+                    </div>
+
+
+                    <div
+                        class="story-date"
+                        id="storyDate">
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- CLOSE BUTTON -->
+
+            <button
+                class="close-button"
+                onclick="closeStory()"
+                title="Close Story">
+
+                ✕
+
+            </button>
+
+
+            <!-- STORY CONTENT -->
+
+            <div class="story-content">
+
+                <div
+                    class="story-text"
+                    id="storyText">
+
+                    Loading story...
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTTOM -->
+
+            <div class="story-bottom">
+
+                ReadLive Story
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+
+        /* =====================================
+           GET SELECTED STORY
+        ===================================== */
+
+        const selectedStory =
+            JSON.parse(
+                localStorage.getItem(
+                    "readliveSelectedStory"
+                )
+            );
+
+
+        /* =====================================
+           CHECK IF STORY EXISTS
+        ===================================== */
+
+        if (!selectedStory) {
+
+            alert("Story not found.");
+
+            window.location.href =
+                "home.html";
+
+        }
+
+
+        /* =====================================
+           DISPLAY STORY
+        ===================================== */
+
+        else {
+
+
+            const storyUser =
+                selectedStory.user ||
+                selectedStory.username ||
+                "User";
+
+
+            const username =
+                selectedStory.username ||
+                "user";
+
+
+            const storyText =
+                selectedStory.text ||
+                selectedStory.content ||
+                "No story content.";
+
+
+            const storyDate =
+                selectedStory.date ||
+                "";
+
+
+            const initial =
+                storyUser
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            document.getElementById(
+                "storyProfile"
+            ).textContent =
+                initial;
+
+
+            document.getElementById(
+                "storyUsername"
+            ).textContent =
+                "@" + username;
+
+
+            document.getElementById(
+                "storyDate"
+            ).textContent =
+                storyDate;
+
+
+            document.getElementById(
+                "storyText"
+            ).textContent =
+                storyText;
+
+        }
+
+
+
+        /* =====================================
+           CLOSE STORY
+        ===================================== */
+
+        function closeStory() {
+
+
+            localStorage.removeItem(
+                "readliveSelectedStory"
+            );
+
+
+            /*
+                IMPORTANT:
+
+                Clicking X / Cancel
+                goes directly to HOME.
+
+                It does NOT go to
+                stories.html.
+            */
+
+            window.location.href =
+                "home.html";
+
+        }
+
+
+
+        /* =====================================
+           ESC KEY
+        ===================================== */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeStory();
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

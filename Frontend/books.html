@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - Books</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Read<span>Live</span>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="home.html" class="side-link">
+                🏠
+                <span>Home</span>
+            </a>
+
+
+            <a href="books.html" class="side-link active">
+                📚
+                <span>Books</span>
+            </a>
+
+
+            <a href="live-sessions.html" class="side-link">
+                🔴
+                <span>Live Sessions</span>
+            </a>
+
+
+            <a href="search.html" class="side-link">
+                🔍
+                <span>Search</span>
+            </a>
+
+
+            <a href="notifications.html" class="side-link">
+                🔔
+                <span>Notifications</span>
+            </a>
+
+
+            <a href="profile.html" class="side-link">
+                👤
+                <span>Profile</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+            ReadLive
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN AREA
+    ========================================== -->
+
+    <div class="main-area">
+
+
+        <!-- =====================================
+             TOP BAR
+        ====================================== -->
+
+        <header class="topbar">
+
+            <div class="top-search-box">
+
+                <span>🔍</span>
+
+                <input
+                    type="text"
+                    id="bookSearch"
+                    placeholder="Search books..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="top-actions">
+
+
+                <button
+                    type="button"
+                    onclick="openNotifications()"
+                    title="Notifications"
+                >
+                    🔔
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="openMessages()"
+                    title="Messages"
+                >
+                    💬
+                </button>
+
+
+                <button
+                    type="button"
+                    class="top-profile"
+                    id="topProfile"
+                    onclick="openProfile()"
+                    title="Profile"
+                >
+                    U
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================
+             BOOKS CONTENT
+        ====================================== -->
+
+        <main class="books-page">
+
+
+            <div class="books-heading-row">
+
+                <div class="books-heading">
+
+                    <h1>
+                        Explore Books
+                    </h1>
+
+                    <p>
+                        Discover books and start your reading journey.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="home.html"
+                    class="home-link"
+                >
+                    ← Home
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================
+                 CATEGORY FILTERS
+            ================================== -->
+
+            <div class="category-container">
+
+
+                <button
+                    class="category-button active"
+                    data-category="All"
+                    onclick="filterCategory('All')"
+                >
+                    All
+                </button>
+
+
+                <button
+                    class="category-button"
+                    data-category="Fiction"
+                    onclick="filterCategory('Fiction')"
+                >
+                    Fiction
+                </button>
+
+
+                <button
+                    class="category-button"
+                    data-category="Self Help"
+                    onclick="filterCategory('Self Help')"
+                >
+                    Self Help
+                </button>
+
+
+                <button
+                    class="category-button"
+                    data-category="Mystery"
+                    onclick="filterCategory('Mystery')"
+                >
+                    Mystery
+                </button>
+
+
+                <button
+                    class="category-button"
+                    data-category="Romance"
+                    onclick="filterCategory('Romance')"
+                >
+                    Romance
+                </button>
+
+
+                <button
+                    class="category-button"
+                    data-category="Business"
+                    onclick="filterCategory('Business')"
+                >
+                    Business
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================
+                 BOOK GRID
+            ================================== -->
+
+            <div
+                class="books-grid"
+                id="booksGrid"
+            >
+
+                <div class="no-books">
+
+                    <h2>
+                        Loading Books...
+                    </h2>
+
+                    <p>
+                        Please wait while we load the books.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+
+        // =====================================================
+        // BACKEND URL
+        // =====================================================
+
+        const API_URL =
+            "http://localhost:5000";
+
+
+
+        // =====================================================
+        // STORE BOOKS FROM MONGODB
+        // =====================================================
+
+        let allBooks = [];
+
+
+
+        // =====================================================
+        // CURRENT CATEGORY
+        // =====================================================
+
+        let currentCategory = "All";
+
+
+
+        // =====================================================
+        // GET CURRENT USER
+        // =====================================================
+
+        function getCurrentUser() {
+
+            const user =
+                localStorage.getItem("user");
+
+            if (!user) {
+                return null;
+            }
+
+            try {
+
+                return JSON.parse(user);
+
+            } catch (error) {
+
+                return null;
+
+            }
+
+        }
+
+
+
+        // =====================================================
+        // ESCAPE HTML
+        // =====================================================
+
+        function escapeHTML(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return "";
+
+            }
+
+            return String(value)
+
+                .replace(/&/g, "&amp;")
+
+                .replace(/</g, "&lt;")
+
+                .replace(/>/g, "&gt;")
+
+                .replace(/"/g, "&quot;")
+
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+
+        // =====================================================
+        // GET INITIAL
+        // =====================================================
+
+        function getInitial(name) {
+
+            if (!name) {
+
+                return "U";
+
+            }
+
+            return String(name)
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+
+        // =====================================================
+        // LOAD PROFILE
+        // =====================================================
+
+        function loadTopProfile() {
+
+            const user =
+                getCurrentUser();
+
+
+            const profile =
+                document.getElementById(
+                    "topProfile"
+                );
+
+
+            if (!profile) {
+
+                return;
+
+            }
+
+
+            if (!user) {
+
+                profile.innerText = "U";
+
+                return;
+
+            }
+
+
+            profile.innerText =
+                getInitial(
+                    user.username ||
+                    user.name
+                );
+
+        }
+
+
+
+        // =====================================================
+        // LOAD BOOKS FROM MONGODB
+        // =====================================================
+
+        async function loadBooks() {
+
+            const grid =
+                document.getElementById(
+                    "booksGrid"
+                );
+
+
+            if (!grid) {
+
+                return;
+
+            }
+
+
+            const token =
+                localStorage.getItem(
+                    "token"
+                );
+
+
+            if (!token) {
+
+                grid.innerHTML = `
+
+                    <div class="no-books">
+
+                        <h2>
+                            Login Required
+                        </h2>
+
+                        <p>
+                            Please login to view books.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            try {
+
+                grid.innerHTML = `
+
+                    <div class="no-books">
+
+                        <h2>
+                            Loading Books...
+                        </h2>
+
+                        <p>
+                            Please wait.
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/books",
+                        {
+
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            }
+
+                        }
+                    );
+
+
+                // =================================================
+                // TOKEN EXPIRED / NOT AUTHORIZED
+                // =================================================
+
+                if (response.status === 401) {
+
+                    grid.innerHTML = `
+
+                        <div class="no-books">
+
+                            <h2>
+                                Session Expired
+                            </h2>
+
+                            <p>
+                                Please login again.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load books."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Books received from MongoDB:",
+                    data
+                );
+
+
+                allBooks =
+                    Array.isArray(data)
+                        ? data
+                        : [];
+
+
+                renderBooks();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load books error:",
+                    error
+                );
+
+
+                grid.innerHTML = `
+
+                    <div class="no-books">
+
+                        <h2>
+                            Unable to Load Books
+                        </h2>
+
+                        <p>
+                            Make sure the Node.js backend is running.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+
+        // =====================================================
+        // RENDER BOOKS
+        // =====================================================
+
+        function renderBooks() {
+
+            const grid =
+                document.getElementById(
+                    "booksGrid"
+                );
+
+
+            const searchInput =
+                document.getElementById(
+                    "bookSearch"
+                );
+
+
+            if (!grid) {
+
+                return;
+
+            }
+
+
+            const query =
+                searchInput
+                    ? searchInput.value
+                        .trim()
+                        .toLowerCase()
+                    : "";
+
+
+
+            // =================================================
+            // FILTER BOOKS
+            // =================================================
+
+            const filteredBooks =
+                allBooks.filter(
+                    function(book) {
+
+
+                        // CATEGORY FILTER
+
+                        const category =
+                            String(
+                                book.category ||
+                                ""
+                            );
+
+
+                        if (
+
+                            currentCategory !==
+                            "All"
+
+                            &&
+
+                            category
+                                .toLowerCase() !==
+                            currentCategory
+                                .toLowerCase()
+
+                        ) {
+
+                            return false;
+
+                        }
+
+
+
+                        // SEARCH FILTER
+
+                        if (!query) {
+
+                            return true;
+
+                        }
+
+
+                        const title =
+                            String(
+                                book.title ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const author =
+                            String(
+                                book.author ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const bookCategory =
+                            String(
+                                book.category ||
+                                ""
+                            ).toLowerCase();
+
+
+                        const description =
+                            String(
+                                book.description ||
+                                ""
+                            ).toLowerCase();
+
+
+                        return (
+
+                            title.includes(query)
+
+                            ||
+
+                            author.includes(query)
+
+                            ||
+
+                            bookCategory.includes(query)
+
+                            ||
+
+                            description.includes(query)
+
+                        );
+
+                    }
+                );
+
+
+
+            // =================================================
+            // NO BOOKS
+            // =================================================
+
+            if (
+                filteredBooks.length === 0
+            ) {
+
+                grid.innerHTML = `
+
+                    <div class="no-books">
+
+                        <h2>
+
+                            ${
+                                allBooks.length === 0
+
+                                ?
+
+                                "No Books Available"
+
+                                :
+
+                                "No Books Found"
+
+                            }
+
+                        </h2>
+
+
+                        <p>
+
+                            ${
+                                allBooks.length === 0
+
+                                ?
+
+                                "Books added by the administrator will appear here."
+
+                                :
+
+                                "Try another book title, author or category."
+
+                            }
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+
+            // =================================================
+            // CREATE BOOK CARDS
+            // =================================================
+
+            let html = "";
+
+
+            filteredBooks.forEach(
+                function(book) {
+
+
+                    const title =
+                        book.title ||
+                        "Untitled Book";
+
+
+                    const author =
+                        book.author ||
+                        "Unknown Author";
+
+
+                    const category =
+                        book.category ||
+                        "Book";
+
+
+                    const description =
+                        book.description ||
+                        "";
+
+
+                    // IMPORTANT:
+                    // Admin saves cover as coverImage
+                    // not image.
+
+                    const image =
+                        book.coverImage ||
+                        book.image ||
+                        "";
+
+
+
+                    html += `
+
+                        <article
+                            class="book-card"
+                        >
+
+
+                            <div
+                                class="book-cover"
+                            >
+
+                                ${
+                                    image
+
+                                    ?
+
+                                    `
+
+                                    <img
+
+                                        src="${escapeHTML(image)}"
+
+                                        alt="${escapeHTML(title)}"
+
+                                    >
+
+                                    `
+
+                                    :
+
+                                    `
+
+                                    <div
+                                        class="book-cover-placeholder"
+                                    >
+                                        📖
+                                    </div>
+
+                                    `
+
+                                }
+
+                            </div>
+
+
+
+                            <div
+                                class="book-content"
+                            >
+
+
+                                <h2
+                                    class="book-title"
+                                >
+
+                                    ${escapeHTML(title)}
+
+                                </h2>
+
+
+                                <p
+                                    class="book-author"
+                                >
+
+                                    ${escapeHTML(author)}
+
+                                </p>
+
+
+                                <p
+                                    class="book-category"
+                                >
+
+                                    ${escapeHTML(category)}
+
+                                </p>
+
+
+                                ${
+                                    description
+
+                                    ?
+
+                                    `
+
+                                    <p
+                                        class="book-description"
+                                    >
+
+                                        ${escapeHTML(description)}
+
+                                    </p>
+
+                                    `
+
+                                    :
+
+                                    ""
+
+                                }
+
+
+
+                                <button
+
+                                    type="button"
+
+                                    class="read-button"
+
+                                    onclick="openBook('${String(book._id || book.id).replace(/'/g, "\\'")}')"
+
+                                >
+
+                                    Read Book
+
+                                </button>
+
+
+                            </div>
+
+
+                        </article>
+
+                    `;
+
+                }
+            );
+
+
+            grid.innerHTML =
+                html;
+
+        }
+
+
+
+        // =====================================================
+        // SEARCH
+        // =====================================================
+
+        const bookSearch =
+            document.getElementById(
+                "bookSearch"
+            );
+
+
+        if (bookSearch) {
+
+            bookSearch.addEventListener(
+                "input",
+                function() {
+
+                    renderBooks();
+
+                }
+            );
+
+
+            bookSearch.addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        renderBooks();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+
+        // =====================================================
+        // CATEGORY FILTER
+        // =====================================================
+
+        function filterCategory(
+            category
+        ) {
+
+            currentCategory =
+                category;
+
+
+            const buttons =
+                document.querySelectorAll(
+                    ".category-button"
+                );
+
+
+            buttons.forEach(
+                function(button) {
+
+                    button.classList.remove(
+                        "active"
+                    );
+
+
+                    if (
+
+                        button.dataset.category
+                            .toLowerCase() ===
+                        category.toLowerCase()
+
+                    ) {
+
+                        button.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            renderBooks();
+
+        }
+
+
+
+        // =====================================================
+        // OPEN BOOK
+        // =====================================================
+
+        function openBook(bookId) {
+
+            const selectedBook =
+                allBooks.find(
+                    function(book) {
+
+                        return String(
+                            book._id
+                        ) ===
+                        String(bookId);
+
+                    }
+                );
+
+
+            if (!selectedBook) {
+
+                alert(
+                    "Book not found."
+                );
+
+                return;
+
+            }
+
+
+            // Save selected MongoDB book
+
+            localStorage.setItem(
+
+                "readliveSelectedBook",
+
+                JSON.stringify(
+                    selectedBook
+                )
+
+            );
+
+
+            window.location.href =
+                "reader.html";
+
+        }
+
+
+
+        // =====================================================
+        // PROFILE
+        // =====================================================
+
+        function openProfile() {
+
+            window.location.href =
+                "profile.html";
+
+        }
+
+
+
+        // =====================================================
+        // NOTIFICATIONS
+        // =====================================================
+
+        function openNotifications() {
+
+            window.location.href =
+                "notifications.html";
+
+        }
+
+
+
+        // =====================================================
+        // MESSAGES
+        // =====================================================
+
+        function openMessages() {
+
+            const session =
+                JSON.parse(
+                    localStorage.getItem(
+                        "readliveCurrentLiveSession"
+                    )
+                );
+
+
+            if (session) {
+
+                window.location.href =
+                    "live-room.html";
+
+                return;
+
+            }
+
+
+            alert(
+                "No active live session available."
+            );
+
+        }
+
+
+
+        // =====================================================
+        // PAGE START
+        // =====================================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                loadTopProfile();
+
+                loadBooks();
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

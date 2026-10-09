@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - Following</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        Read<span>Live</span>
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="home.html" class="side-link">
+            🏠 <span>Home</span>
+        </a>
+
+        <a href="books.html" class="side-link">
+            📚 <span>Books</span>
+        </a>
+
+        <a href="live-sessions.html" class="side-link">
+            🔴 <span>Live Sessions</span>
+        </a>
+
+        <a href="search.html" class="side-link">
+            🔍 <span>Search</span>
+        </a>
+
+        <a href="notifications.html" class="side-link">
+            🔔 <span>Notifications</span>
+            <b class="notification-count">3</b>
+        </a>
+
+        <a href="profile.html" class="side-link active">
+            👤 <span>Profile</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<div class="main-area">
+
+<header class="topbar">
+
+    <div class="search-box">
+        🔍
+        <input
+            type="text"
+            placeholder="Search books, users...">
+    </div>
+
+    <div class="top-actions">
+
+        <button>🔔</button>
+
+        <button>💬</button>
+
+        <button class="top-profile">
+            V
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="people-page">
+
+    <a href="profile.html" class="back-link">
+        ← Back to Profile
+    </a>
+
+    <h1>Following</h1>
+
+    <p class="page-subtitle">
+        People you follow
+    </p>
+
+
+    <div class="people-list">
+
+
+        <div class="person-card">
+
+            <div class="person-avatar pink-search">
+                P
+            </div>
+
+            <div class="person-info">
+
+                <strong>Priya Sharma</strong>
+
+                <span>@priyareads</span>
+
+            </div>
+
+            <button
+                class="following-button"
+                onclick="toggleFollow(this)">
+
+                Following
+
+            </button>
+
+        </div>
+
+
+        <div class="person-card">
+
+            <div class="person-avatar">
+                R
+            </div>
+
+            <div class="person-info">
+
+                <strong>Rahul Sharma</strong>
+
+                <span>@rahulreads</span>
+
+            </div>
+
+            <button
+                class="following-button"
+                onclick="toggleFollow(this)">
+
+                Following
+
+            </button>
+
+        </div>
+
+
+        <div class="person-card">
+
+            <div class="person-avatar green-search">
+                N
+            </div>
+
+            <div class="person-info">
+
+                <strong>Neha Joshi</strong>
+
+                <span>@nehabooks</span>
+
+            </div>
+
+            <button
+                class="following-button"
+                onclick="toggleFollow(this)">
+
+                Following
+
+            </button>
+
+        </div>
+
+
+        <div class="person-card">
+
+            <div class="person-avatar">
+                A
+            </div>
+
+            <div class="person-info">
+
+                <strong>Aarav Mehta</strong>
+
+                <span>@aaravreads</span>
+
+            </div>
+
+            <button
+                class="following-button"
+                onclick="toggleFollow(this)">
+
+                Following
+
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

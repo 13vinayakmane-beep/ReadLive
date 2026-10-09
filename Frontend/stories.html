@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - Stories</title>
+
+    <link rel="stylesheet" href="style.css">
+
+
+    <style>
+
+
+        /* =====================================
+           STORIES PAGE
+        ====================================== */
+
+        .stories-page {
+
+            padding: 30px;
+
+        }
+
+
+        .stories-page h1 {
+
+            color: #6c4ab6;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .stories-list {
+
+            display: flex;
+
+            gap: 25px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        /* =====================================
+           STORY CARD
+        ====================================== */
+
+        .story-card {
+
+            width: 130px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+        }
+
+
+        .story-circle {
+
+            width: 90px;
+            height: 90px;
+
+            border-radius: 50%;
+
+            margin: auto;
+
+            padding: 4px;
+
+            background:
+                linear-gradient(
+                    45deg,
+                    #6c4ab6,
+                    #c084fc,
+                    #ec4899
+                );
+
+            box-sizing: border-box;
+
+        }
+
+
+        .story-circle-inner {
+
+            width: 100%;
+            height: 100%;
+
+            border-radius: 50%;
+
+            background: #c084fc;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            border: 3px solid white;
+
+            box-sizing: border-box;
+
+        }
+
+
+        .your-story-inner {
+
+            background: #6c4ab6;
+
+        }
+
+
+        .add-story-inner {
+
+            background: #f4f0ff;
+
+            color: #6c4ab6;
+
+            border:
+                3px dashed #6c4ab6;
+
+            font-size: 35px;
+
+        }
+
+
+        .story-card p {
+
+            margin-top: 10px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =====================================
+           BACK HOME
+        ====================================== */
+
+        .back-home {
+
+            display: inline-block;
+
+            margin-bottom: 25px;
+
+            padding: 10px 18px;
+
+            background: #eee;
+
+            color: #333;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+        }
+
+
+        .back-home:hover {
+
+            background: #ddd;
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            Read<span>Live</span>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <a
+                href="home.html"
+                class="side-link">
+
+                🏠
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <a
+                href="books.html"
+                class="side-link">
+
+                📚
+
+                <span>
+                    Books
+                </span>
+
+            </a>
+
+
+            <a
+                href="live-sessions.html"
+                class="side-link">
+
+                🔴
+
+                <span>
+                    Live Sessions
+                </span>
+
+            </a>
+
+
+            <a
+                href="search.html"
+                class="side-link">
+
+                🔍
+
+                <span>
+                    Search
+                </span>
+
+            </a>
+
+
+            <a
+                href="notifications.html"
+                class="side-link">
+
+                🔔
+
+                <span>
+                    Notifications
+                </span>
+
+            </a>
+
+
+            <a
+                href="profile.html"
+                class="side-link">
+
+                👤
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <p>
+
+                © 2026 ReadLive
+
+            </p>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================
+         MAIN AREA
+    ====================================== -->
+
+    <div class="main-area">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+
+            <div class="search-box">
+
+                🔍
+
+                <input
+                    type="text"
+                    placeholder="Search books, users..."
+                >
+
+            </div>
+
+
+            <div class="top-actions">
+
+
+                <button>
+
+                    🔔
+
+                </button>
+
+
+                <button>
+
+                    💬
+
+                </button>
+
+
+                <button
+                    class="top-profile"
+                    id="topProfile">
+
+                    U
+
+                </button>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =====================================
+             STORIES PAGE
+        ====================================== -->
+
+        <main class="stories-page">
+
+
+            <a
+                href="home.html"
+                class="back-home">
+
+                ← Back to Home
+
+            </a>
+
+
+            <h1>
+
+                Stories
+
+            </h1>
+
+
+            <!-- STORIES -->
+
+            <div
+                class="stories-list"
+                id="storiesList">
+
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script src="script.js"></script>
+
+
+    <script>
+
+
+        /* =====================================
+           CURRENT USER
+        ====================================== */
+
+        const currentUser =
+            JSON.parse(
+                localStorage.getItem(
+                    "readliveCurrentUser"
+                )
+            );
+
+
+
+        /* =====================================
+           TOP PROFILE
+        ====================================== */
+
+        if (currentUser) {
+
+
+            const userName =
+                currentUser.name ||
+                currentUser.username ||
+                "User";
+
+
+            document.getElementById(
+                "topProfile"
+            ).textContent =
+                userName
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+
+
+        /* =====================================
+           GET STORIES
+        ====================================== */
+
+        function getStories() {
+
+            return (
+                JSON.parse(
+                    localStorage.getItem(
+                        "readliveStories"
+                    )
+                ) || []
+            );
+
+        }
+
+
+
+        /* =====================================
+           ADD STORY
+        ====================================== */
+
+        function openAddStory() {
+
+            window.location.href =
+                "add-story.html";
+
+        }
+
+
+
+        /* =====================================
+           GET MY STORIES
+        ====================================== */
+
+        function getMyStories() {
+
+
+            const stories =
+                getStories();
+
+
+            if (!currentUser) {
+
+                return [];
+
+            }
+
+
+            return stories.filter(
+                function(story) {
+
+                    return (
+                        story.username ===
+                        currentUser.username
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =====================================
+           VIEW MY STORY
+        ====================================== */
+
+        function viewMyStory() {
+
+
+            const myStories =
+                getMyStories();
+
+
+            if (
+                myStories.length === 0
+            ) {
+
+                openAddStory();
+
+                return;
+
+            }
+
+
+            const latestStory =
+                myStories[
+                    myStories.length - 1
+                ];
+
+
+            localStorage.setItem(
+                "readliveSelectedStory",
+                JSON.stringify(
+                    latestStory
+                )
+            );
+
+
+            /*
+                DIRECTLY OPEN THE STORY.
+                Do NOT open stories.html again.
+            */
+
+            window.location.href =
+                "story-viewer.html";
+
+        }
+
+
+
+        /* =====================================
+           VIEW OTHER STORY
+        ====================================== */
+
+        function viewOtherStory(story) {
+
+
+            if (!story) {
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "readliveSelectedStory",
+                JSON.stringify(
+                    story
+                )
+            );
+
+
+            window.location.href =
+                "story-viewer.html";
+
+        }
+
+
+
+        /* =====================================
+           LOAD STORIES
+        ====================================== */
+
+        function loadStories() {
+
+
+            const storiesList =
+                document.getElementById(
+                    "storiesList"
+                );
+
+
+            storiesList.innerHTML =
+                "";
+
+
+            const stories =
+                getStories();
+
+
+            const myStories =
+                getMyStories();
+
+
+
+            /* =================================
+               YOUR STORY / ADD STORY
+            ================================== */
+
+            const yourStoryCard =
+                document.createElement(
+                    "div"
+                );
+
+
+            yourStoryCard.className =
+                "story-card";
+
+
+            /* =================================
+               USER HAS STORY
+            ================================== */
+
+            if (
+                myStories.length > 0
+            ) {
+
+
+                const userName =
+                    currentUser.name ||
+                    currentUser.username ||
+                    "You";
+
+
+                const initial =
+                    userName
+                        .charAt(0)
+                        .toUpperCase();
+
+
+                yourStoryCard.onclick =
+                    function() {
+
+                        viewMyStory();
+
+                    };
+
+
+                yourStoryCard.innerHTML = `
+
+                    <div
+                        class="story-circle">
+
+
+                        <div
+                            class="
+                                story-circle-inner
+                                your-story-inner
+                            ">
+
+                            ${initial}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <p>
+
+                        Your Story
+
+                    </p>
+
+                `;
+
+            }
+
+
+            /* =================================
+               USER HAS NO STORY
+            ================================== */
+
+            else {
+
+
+                yourStoryCard.onclick =
+                    function() {
+
+                        openAddStory();
+
+                    };
+
+
+                yourStoryCard.innerHTML = `
+
+                    <div
+                        class="story-circle">
+
+
+                        <div
+                            class="
+                                story-circle-inner
+                                add-story-inner
+                            ">
+
+                            +
+
+                        </div>
+
+
+                    </div>
+
+
+                    <p>
+
+                        Add Story
+
+                    </p>
+
+                `;
+
+            }
+
+
+            storiesList.appendChild(
+                yourStoryCard
+            );
+
+
+
+            /* =================================
+               OTHER REAL STORIES
+            ================================== */
+
+            stories.forEach(
+                function(story) {
+
+
+                    /*
+                        Do not display user's own
+                        story a second time.
+                    */
+
+                    if (
+                        currentUser &&
+                        story.username ===
+                        currentUser.username
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "story-card";
+
+
+                    const storyUser =
+                        story.user ||
+                        story.username ||
+                        "User";
+
+
+                    const initial =
+                        storyUser
+                            .charAt(0)
+                            .toUpperCase();
+
+
+                    card.onclick =
+                        function() {
+
+                            viewOtherStory(
+                                story
+                            );
+
+                        };
+
+
+                    card.innerHTML = `
+
+                        <div
+                            class="story-circle">
+
+
+                            <div
+                                class="
+                                    story-circle-inner
+                                ">
+
+                                ${initial}
+
+                            </div>
+
+
+                        </div>
+
+
+                        <p>
+
+                            ${storyUser}
+
+                        </p>
+
+                    `;
+
+
+                    storiesList.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =====================================
+           LOAD
+        ====================================== */
+
+        loadStories();
+
+
+    </script>
+
+
+</body>
+
+</html>

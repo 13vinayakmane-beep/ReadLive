@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - ReadLive</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Keep the page at the correct visual size */
+        html {
+            zoom: 0.7142857;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f4ff;
+            color: #222;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 327px;
+
+            /* FIX: extend white sidebar to bottom */
+            height: 140vh;
+            min-height: 140vh;
+
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+
+            padding: 35px 20px;
+
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+            margin-left: 23px;
+            margin-bottom: 70px;
+        }
+
+        .logo .read {
+            color: #6c4cff;
+        }
+
+        .logo .live {
+            color: #222;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-item {
+            height: 64px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 24px;
+
+            text-decoration: none;
+
+            color: #444;
+
+            font-size: 21px;
+            font-weight: 600;
+
+            border-radius: 14px;
+
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f3efff;
+            color: #6c4cff;
+        }
+
+        .nav-item.active {
+            background: #eee8ff;
+            color: #6c4cff;
+        }
+
+        .nav-icon {
+            width: 38px;
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        .notification-count {
+            margin-left: auto;
+
+            width: 27px;
+            height: 27px;
+
+            border-radius: 50%;
+
+            background: #ff4545;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 327px;
+            min-height: 100vh;
+        }
+
+        /* ================= TOP BAR ================= */
+
+        .topbar {
+            height: 92px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #e5e5e5;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 52px;
+
+            gap: 20px;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-container {
+            width: 525px;
+            height: 62px;
+
+            background: #f4f4f7;
+
+            border-radius: 35px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 25px;
+        }
+
+        .search-icon {
+            font-size: 25px;
+            margin-right: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+
+            border: none;
+            outline: none;
+
+            background: transparent;
+
+            font-size: 20px;
+            color: #222;
+        }
+
+        .search-input::placeholder {
+            color: #777;
+        }
+
+        /* ================= TOP RIGHT BUTTONS ================= */
+
+        .top-actions {
+            margin-left: auto;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .top-action-btn {
+            width: 48px;
+            height: 48px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #f4f1ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            font-size: 21px;
+        }
+
+        .top-profile {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #6c4cff;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        /* ================= CONTENT ================= */
+
+        .content {
+            padding: 52px 68px;
+        }
+
+        .page-title {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 24px;
+            color: #777;
+            margin-bottom: 38px;
+        }
+
+        .unread-text {
+            font-size: 21px;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .unread-number {
+            color: #6c4cff;
+            font-weight: bold;
+        }
+
+        /* ================= NOTIFICATIONS ================= */
+
+        .notification-list {
+            width: 100%;
+            max-width: 1000px;
+
+            border: 1px solid #ddd;
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            background: rgba(255,255,255,0.15);
+        }
+
+        .notification-item {
+            min-height: 148px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 26px 34px;
+
+            border-bottom: 1px solid #ddd;
+            border-left: 6px solid #6c4cff;
+
+            background: rgba(255,255,255,0.08);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item:hover {
+            background: #f0ebff;
+        }
+
+        .notification-icon {
+            width: 82px;
+            height: 82px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 36px;
+
+            margin-right: 27px;
+
+            flex-shrink: 0;
+        }
+
+        .book-icon {
+            background: #6946ff;
+        }
+
+        .live-icon {
+            background: #ff4048;
+        }
+
+        .general-icon {
+            background: #777;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 24px;
+            color: #111;
+            margin-bottom: 10px;
+        }
+
+        .notification-time {
+            font-size: 19px;
+            color: #888;
+        }
+
+        /* ================= NO RESULTS ================= */
+
+        .no-results {
+            width: 100%;
+            max-width: 1000px;
+
+            padding: 55px 30px;
+
+            text-align: center;
+
+            border: 1px solid #ddd;
+            border-radius: 22px;
+
+            background: rgba(255,255,255,0.4);
+
+            display: none;
+        }
+
+        .no-results-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .no-results p {
+            color: #777;
+            font-size: 18px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 80px;
+                height: 140vh;
+                min-height: 140vh;
+                padding: 25px 10px;
+            }
+
+            .logo {
+                font-size: 0;
+                margin: 0 auto 50px;
+                text-align: center;
+            }
+
+            .logo .read::first-letter {
+                font-size: 32px;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 0;
+            }
+
+            .nav-item span:not(.nav-icon) {
+                display: none;
+            }
+
+            .nav-icon {
+                margin-right: 0;
+                width: auto;
+            }
+
+            .notification-count {
+                display: none;
+            }
+
+            .main {
+                margin-left: 80px;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .top-actions {
+                display: none;
+            }
+
+            .content {
+                padding: 35px 25px;
+            }
+
+            .page-title {
+                font-size: 40px;
+            }
+
+            .page-subtitle {
+                font-size: 19px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .notification-item {
+                padding: 20px;
+            }
+
+            .notification-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 27px;
+                margin-right: 17px;
+            }
+
+            .notification-title {
+                font-size: 18px;
+            }
+
+            .notification-time {
+                font-size: 15px;
+            }
+
+            .page-title {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span class="read">Read</span><span class="live">Live</span>
+        </div>
+
+        <nav class="nav-menu">
+
+            <a href="home.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>Home</span>
+            </a>
+
+            <a href="books.html" class="nav-item">
+                <span class="nav-icon">📚</span>
+                <span>Books</span>
+            </a>
+
+            <a href="live-sessions.html" class="nav-item">
+                <span class="nav-icon">🔴</span>
+                <span>Live Sessions</span>
+            </a>
+
+            <a href="search.html" class="nav-item">
+                <span class="nav-icon">🔍</span>
+                <span>Search</span>
+            </a>
+
+            <a href="notifications.html" class="nav-item active">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+
+                <span
+                    class="notification-count"
+                    id="notificationCount">
+                    0
+                </span>
+            </a>
+
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>Profile</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="search-container">
+
+                <span class="search-icon">🔍</span>
+
+                <input
+                    type="text"
+                    id="notificationSearch"
+                    class="search-input"
+                    placeholder="Search books, users..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+            <div class="top-actions">
+
+                <button
+                    type="button"
+                    class="top-action-btn"
+                    id="notificationBtn">
+                    🔔
+                </button>
+
+                <button
+                    type="button"
+                    class="top-action-btn"
+                    id="messagesBtn">
+                    💬
+                </button>
+
+                <button
+                    type="button"
+                    class="top-profile"
+                    id="topProfile">
+                    U
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="content">
+
+            <h1 class="page-title">
+                Notifications
+            </h1>
+
+            <p class="page-subtitle">
+                Stay updated with your reading activity.
+            </p>
+
+            <div class="unread-text">
+
+                <span
+                    id="unreadCount"
+                    class="unread-number">
+                    0
+                </span>
+
+                unread notifications
+
+            </div>
+
+
+            <div
+                id="notificationList"
+                class="notification-list">
+            </div>
+
+
+            <div
+                id="noResults"
+                class="no-results">
+
+                <div class="no-results-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    No notifications found
+                </h3>
+
+                <p>
+                    Try another search.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const notificationList =
+            document.getElementById("notificationList");
+
+        const noResults =
+            document.getElementById("noResults");
+
+        const notificationSearch =
+            document.getElementById("notificationSearch");
+
+        const unreadCount =
+            document.getElementById("unreadCount");
+
+        const sidebarNotificationCount =
+            document.getElementById("notificationCount");
+
+
+        function getBooks() {
+
+            return JSON.parse(
+                localStorage.getItem("readliveBooks")
+            ) || [];
+
+        }
+
+
+        function getLiveSessions() {
+
+            return JSON.parse(
+                localStorage.getItem("readliveLiveSessions")
+            ) || [];
+
+        }
+
+
+        function getCurrentUser() {
+
+            return JSON.parse(
+                localStorage.getItem("readliveCurrentUser")
+            ) || null;
+
+        }
+
+
+        function escapeHTML(value) {
+
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        function formatDate(value) {
+
+            if (!value) {
+                return "Recently";
+            }
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return String(value);
+            }
+
+            return date.toLocaleDateString();
+
+        }
+
+
+        function createNotifications() {
+
+            const notifications = [];
+
+            const books = getBooks();
+
+            const sessions = getLiveSessions();
+
+
+            /* BOOK NOTIFICATIONS */
+
+            books.forEach(function(book) {
+
+                notifications.push({
+
+                    id: "book-" + book.id,
+
+                    type: "book",
+
+                    title:
+                        "New book added: " +
+                        (book.title || "New Book"),
+
+                    searchText:
+                        [
+                            book.title || "",
+                            book.author || "",
+                            book.category || "",
+                            "book",
+                            "new book added"
+                        ]
+                        .join(" ")
+                        .toLowerCase(),
+
+                    time:
+                        book.date ||
+                        book.createdAt ||
+                        "Recently"
+
+                });
+
+            });
+
+
+            /* LIVE SESSION NOTIFICATIONS */
+
+            sessions.forEach(function(session) {
+
+                const status =
+                    String(session.status || "")
+                    .toLowerCase();
+
+                if (
+                    status === "live" ||
+                    status === "upcoming"
+                ) {
+
+                    notifications.push({
+
+                        id:
+                            "live-" +
+                            session.id,
+
+                        type: "live",
+
+                        title:
+                            "Live session started: " +
+                            (
+                                session.title ||
+                                "Live Reading"
+                            ),
+
+                        searchText:
+                            [
+                                session.title || "",
+                                session.book || "",
+                                session.host || "",
+                                session.hostUsername || "",
+                                "live",
+                                "live session",
+                                "live reading"
+                            ]
+                            .join(" ")
+                            .toLowerCase(),
+
+                        time:
+                            session.date ||
+                            session.time ||
+                            "Recently"
+
+                    });
+
+                }
+
+            });
+
+
+            /* SAVED NOTIFICATIONS */
+
+            const saved =
+                JSON.parse(
+                    localStorage.getItem(
+                        "readliveNotifications"
+                    )
+                ) || [];
+
+
+            saved.forEach(function(item, index) {
+
+                const title =
+                    item.title ||
+                    item.message ||
+                    "New notification";
+
+
+                notifications.push({
+
+                    id:
+                        item.id ||
+                        "notification-" + index,
+
+                    type:
+                        item.type ||
+                        "general",
+
+                    title: title,
+
+                    searchText:
+                        [
+                            title,
+                            item.message || "",
+                            item.username || "",
+                            item.book || "",
+                            item.user || ""
+                        ]
+                        .join(" ")
+                        .toLowerCase(),
+
+                    time:
+                        item.time ||
+                        item.date ||
+                        "Recently"
+
+                });
+
+            });
+
+
+            return notifications.reverse();
+
+        }
+
+
+        function renderNotifications(searchTerm = "") {
+
+            const notifications =
+                createNotifications();
+
+            const search =
+                searchTerm
+                .trim()
+                .toLowerCase();
+
+
+            const filtered =
+                notifications.filter(function(notification) {
+
+                    if (!search) {
+                        return true;
+                    }
+
+                    return notification.searchText
+                        .includes(search);
+
+                });
+
+
+            notificationList.innerHTML = "";
+
+
+            if (filtered.length === 0) {
+
+                notificationList.style.display =
+                    "none";
+
+                noResults.style.display =
+                    "block";
+
+                updateUnreadCount(0);
+
+                return;
+
+            }
+
+
+            notificationList.style.display =
+                "block";
+
+            noResults.style.display =
+                "none";
+
+
+            filtered.forEach(function(notification) {
+
+                let icon = "🔔";
+                let iconClass = "general-icon";
+
+
+                if (notification.type === "book") {
+
+                    icon = "📚";
+                    iconClass = "book-icon";
+
+                }
+
+
+                if (notification.type === "live") {
+
+                    icon = "🔴";
+                    iconClass = "live-icon";
+
+                }
+
+
+                const item =
+                    document.createElement("div");
+
+
+                item.className =
+                    "notification-item";
+
+
+                item.innerHTML = `
+
+                    <div class="notification-icon ${iconClass}">
+                        ${icon}
+                    </div>
+
+                    <div class="notification-content">
+
+                        <div class="notification-title">
+                            ${escapeHTML(notification.title)}
+                        </div>
+
+                        <div class="notification-time">
+                            ${escapeHTML(
+                                formatDate(notification.time)
+                            )}
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                notificationList.appendChild(item);
+
+            });
+
+
+            updateUnreadCount(filtered.length);
+
+        }
+
+
+        function updateUnreadCount(count) {
+
+            unreadCount.textContent = count;
+
+            sidebarNotificationCount.textContent = count;
+
+        }
+
+
+        /* SEARCH */
+
+        notificationSearch.addEventListener(
+            "input",
+            function() {
+
+                renderNotifications(
+                    this.value
+                );
+
+            }
+        );
+
+
+        notificationSearch.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    event.preventDefault();
+
+                    renderNotifications(
+                        this.value
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* NOTIFICATION BUTTON */
+
+        document
+            .getElementById("notificationBtn")
+            .addEventListener(
+                "click",
+                function() {
+
+                    window.location.href =
+                        "notifications.html";
+
+                }
+            );
+
+
+        /* MESSAGES BUTTON */
+
+        document
+            .getElementById("messagesBtn")
+            .addEventListener(
+                "click",
+                function() {
+
+                    const session =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "readliveCurrentLiveSession"
+                            )
+                        );
+
+
+                    if (session) {
+
+                        window.location.href =
+                            "live-room.html";
+
+                    } else {
+
+                        alert(
+                            "No active live session available."
+                        );
+
+                    }
+
+                }
+            );
+
+
+        /* PROFILE BUTTON */
+
+        document
+            .getElementById("topProfile")
+            .addEventListener(
+                "click",
+                function() {
+
+                    window.location.href =
+                        "profile.html";
+
+                }
+            );
+
+
+        /* PROFILE INITIAL */
+
+        function updateTopProfile() {
+
+            const user =
+                getCurrentUser();
+
+            const button =
+                document.getElementById(
+                    "topProfile"
+                );
+
+
+            if (!user) {
+
+                button.textContent = "U";
+
+                return;
+
+            }
+
+
+            const name =
+                user.name ||
+                user.username ||
+                "U";
+
+
+            button.textContent =
+                name.charAt(0).toUpperCase();
+
+        }
+
+
+        renderNotifications();
+
+        updateTopProfile();
+
+
+        /* UPDATE WHEN DATA CHANGES */
+
+        window.addEventListener(
+            "storage",
+            function(event) {
+
+                if (
+                    event.key === "readliveBooks" ||
+                    event.key === "readliveLiveSessions" ||
+                    event.key === "readliveNotifications" ||
+                    event.key === "readliveCurrentUser"
+                ) {
+
+                    renderNotifications(
+                        notificationSearch.value
+                    );
+
+                    updateTopProfile();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

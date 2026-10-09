@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>ReadLive - Profile</title>
+
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background: #f6f4ff;
+
+    color: #222;
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar {
+
+    position: fixed;
+
+    left: 0;
+
+    top: 0;
+
+    width: 220px;
+
+    height: 100vh;
+
+    background: white;
+
+    border-right: 1px solid #e5e2ee;
+
+    padding: 26px 14px 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    z-index: 1000;
+
+}
+
+
+.logo {
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    margin-left: 18px;
+
+    margin-bottom: 42px;
+
+}
+
+
+.logo span {
+
+    color: #6848ff;
+
+}
+
+
+.nav {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    flex: 1;
+
+}
+
+
+.nav a {
+
+    text-decoration: none;
+
+    color: #333;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    padding: 11px 13px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.nav a:hover,
+.nav a.active {
+
+    background: #eee8ff;
+
+    color: #6848ff;
+
+}
+
+
+.nav-icon {
+
+    width: 27px;
+
+    text-align: center;
+
+    font-size: 20px;
+
+}
+
+
+.notification-count {
+
+    margin-left: auto;
+
+    background: #ff4148;
+
+    color: white;
+
+    width: 20px;
+
+    height: 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 11px;
+
+}
+
+
+.logout-button {
+
+    text-decoration: none;
+
+    color: #333;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    padding: 11px 13px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: auto;
+
+}
+
+
+.logout-button:hover {
+
+    background: #fff0f0;
+
+    color: #e53935;
+
+}
+
+
+.logout-icon {
+
+    width: 27px;
+
+    text-align: center;
+
+    font-size: 20px;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+
+    margin-left: 220px;
+
+    min-height: 100vh;
+
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.topbar {
+
+    height: 90px;
+
+    background: white;
+
+    border-bottom: 1px solid #e5e2ee;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 35px;
+
+    gap: 20px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 900;
+
+}
+
+
+.search-box {
+
+    width: 525px;
+
+    height: 48px;
+
+    background: #f5f4f7;
+
+    border-radius: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 20px;
+
+}
+
+
+.search-icon {
+
+    font-size: 21px;
+
+    margin-right: 12px;
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    font-size: 16px;
+
+}
+
+
+.top-actions {
+
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.top-button {
+
+    width: 48px;
+
+    height: 48px;
+
+    border: none;
+
+    background: #f0ebff;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-size: 20px;
+
+}
+
+
+.top-profile {
+
+    width: 50px;
+
+    height: 50px;
+
+    border-radius: 50%;
+
+    background: #6848ff;
+
+    color: white;
+
+    border: none;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.page-content {
+
+    padding: 28px 35px 40px;
+
+}
+
+
+.profile-container {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+}
+
+
+/* =====================================================
+   PROFILE HEADER
+===================================================== */
+
+.profile-header {
+
+    background: white;
+
+    border: 1px solid #e2dfea;
+
+    border-radius: 18px;
+
+    padding: 24px 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+}
+
+
+.profile-avatar {
+
+    width: 100px;
+
+    height: 100px;
+
+    border-radius: 50%;
+
+    background: #6848ff;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 40px;
+
+    font-weight: bold;
+
+}
+
+
+.profile-info {
+
+    flex: 1;
+
+}
+
+
+.profile-name {
+
+    font-size: 30px;
+
+    margin-bottom: 3px;
+
+}
+
+
+.profile-username {
+
+    color: #777;
+
+    margin-bottom: 14px;
+
+}
+
+
+.profile-bio {
+
+    color: #444;
+
+    margin-bottom: 17px;
+
+}
+
+
+.profile-stats {
+
+    display: flex;
+
+    gap: 32px;
+
+}
+
+
+.stat strong {
+
+    display: block;
+
+    font-size: 21px;
+
+}
+
+
+.stat span {
+
+    color: #777;
+
+    font-size: 14px;
+
+}
+
+
+.edit-button {
+
+    border: 1px solid #6848ff;
+
+    color: #6848ff;
+
+    background: white;
+
+    border-radius: 9px;
+
+    padding: 10px 20px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.edit-button:hover {
+
+    background: #f0ebff;
+
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+.profile-tabs {
+
+    display: flex;
+
+    justify-content: center;
+
+    border-bottom: 1px solid #ddd8e8;
+
+    margin-top: 22px;
+
+}
+
+
+.tab-button {
+
+    width: 180px;
+
+    padding: 14px 10px;
+
+    background: none;
+
+    border: none;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    color: #777;
+
+    cursor: pointer;
+
+    border-bottom: 3px solid transparent;
+
+}
+
+
+.tab-button.active {
+
+    color: #6848ff;
+
+    border-bottom-color: #6848ff;
+
+}
+
+
+.tab-content {
+
+    display: none;
+
+    margin-top: 18px;
+
+}
+
+
+.tab-content.active {
+
+    display: block;
+
+}
+
+
+.empty-box {
+
+    background: white;
+
+    border: 1px solid #e2dfea;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    color: #777;
+
+}
+
+
+/* =====================================================
+   POSTS
+===================================================== */
+
+.create-post {
+
+    background: white;
+
+    border: 1px solid #e2dfea;
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.create-post textarea {
+
+    width: 100%;
+
+    min-height: 80px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    padding: 13px;
+
+    resize: vertical;
+
+    outline: none;
+
+    font-family: Arial;
+
+    font-size: 15px;
+
+}
+
+
+.create-post-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin-top: 10px;
+
+}
+
+
+.post-button {
+
+    background: #6848ff;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 18px;
+
+    cursor: pointer;
+
+}
+
+
+.post-card {
+
+    background: white;
+
+    border: 1px solid #e2dfea;
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-bottom: 16px;
+
+}
+
+
+.post-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 13px;
+
+}
+
+
+.small-avatar {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #6848ff;
+
+    color: white;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-weight: bold;
+
+}
+
+
+.post-user-name {
+
+    font-weight: 600;
+
+}
+
+
+.post-time {
+
+    color: #888;
+
+    font-size: 12px;
+
+}
+
+
+.post-text {
+
+    line-height: 1.5;
+
+    margin-bottom: 13px;
+
+}
+
+
+.post-actions {
+
+    border-top: 1px solid #eee;
+
+    padding-top: 11px;
+
+    display: flex;
+
+    gap: 22px;
+
+    color: #777;
+
+}
+
+
+/* =====================================================
+   READING / BOOKMARKS
+===================================================== */
+
+.reading-card,
+.bookmark-card {
+
+    background: white;
+
+    border: 1px solid #e2dfea;
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.reading-title,
+.bookmark-title {
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+}
+
+
+.reading-author,
+.bookmark-author {
+
+    color: #777;
+
+    margin-bottom: 11px;
+
+}
+
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 7px;
+
+    background: #eee;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+}
+
+
+.progress-fill {
+
+    height: 100%;
+
+    background: #6848ff;
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    z-index: 2000;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+.modal.show {
+
+    display: flex;
+
+}
+
+
+.modal-box {
+
+    width: 430px;
+
+    max-width: calc(100% - 30px);
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+}
+
+
+.form-group {
+
+    margin-bottom: 14px;
+
+}
+
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-weight: 600;
+
+}
+
+
+.form-group input,
+.form-group textarea {
+
+    width: 100%;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    font-family: Arial;
+
+}
+
+
+.form-group textarea {
+
+    min-height: 80px;
+
+}
+
+
+.modal-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 18px;
+
+}
+
+
+.cancel-button {
+
+    border: 1px solid #ccc;
+
+    background: white;
+
+    padding: 9px 17px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+
+.save-button {
+
+    border: none;
+
+    background: #6848ff;
+
+    color: white;
+
+    padding: 9px 17px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+
+@media(max-width:900px) {
+
+    .sidebar {
+        width: 70px;
+    }
+
+    .logo {
+        font-size: 0;
+    }
+
+    .logo span {
+        font-size: 24px;
+    }
+
+    .nav a span:not(.nav-icon),
+    .notification-count,
+    .logout-button span:not(.logout-icon) {
+        display: none;
+    }
+
+    .nav a,
+    .logout-button {
+        justify-content: center;
+    }
+
+    .main {
+        margin-left: 70px;
+    }
+
+}
+
+
+@media(max-width:700px) {
+
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <span>Read</span>Live
+    </div>
+
+
+    <nav class="nav">
+
+        <a href="home.html">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+
+
+        <a href="books.html">
+            <span class="nav-icon">📚</span>
+            <span>Books</span>
+        </a>
+
+
+        <a href="live-sessions.html">
+            <span class="nav-icon">🔴</span>
+            <span>Live Sessions</span>
+        </a>
+
+
+        <a href="search.html">
+            <span class="nav-icon">🔍</span>
+            <span>Search</span>
+        </a>
+
+
+        <a href="notifications.html">
+            <span class="nav-icon">🔔</span>
+            <span>Notifications</span>
+            <span
+                class="notification-count"
+                id="notificationCount"
+            >0</span>
+        </a>
+
+
+        <a
+            href="profile.html"
+            class="active"
+        >
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+        </a>
+
+    </nav>
+
+
+    <a
+        href="#"
+        class="logout-button"
+        id="logoutButton"
+    >
+
+        <span class="logout-icon">🚪</span>
+
+        <span>Logout</span>
+
+    </a>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+<header class="topbar">
+
+
+    <div class="search-box">
+
+        <span class="search-icon">
+            🔍
+        </span>
+
+        <input
+            id="globalSearch"
+            type="text"
+            placeholder="Search books, users..."
+        >
+
+    </div>
+
+
+    <div class="top-actions">
+
+
+        <button
+            class="top-button"
+            id="notificationBtn"
+        >
+            🔔
+        </button>
+
+
+        <button
+            class="top-button"
+            id="messagesBtn"
+        >
+            💬
+        </button>
+
+
+        <button
+            class="top-profile"
+            id="topProfile"
+        >
+            U
+        </button>
+
+
+    </div>
+
+</header>
+
+
+<div class="page-content">
+
+
+<div class="profile-container">
+
+
+<section class="profile-header">
+
+
+    <div
+        class="profile-avatar"
+        id="profileAvatar"
+    >
+        U
+    </div>
+
+
+    <div class="profile-info">
+
+
+        <h1
+            class="profile-name"
+            id="profileName"
+        >
+            Loading...
+        </h1>
+
+
+        <div
+            class="profile-username"
+            id="profileUsername"
+        >
+            @loading
+        </div>
+
+
+        <div
+            class="profile-bio"
+            id="profileBio"
+        >
+            Loading profile...
+        </div>
+
+
+        <div class="profile-stats">
+
+
+            <div class="stat">
+
+                <strong id="followersCount">
+                    0
+                </strong>
+
+                <span>
+                    Followers
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong id="followingCount">
+                    0
+                </strong>
+
+                <span>
+                    Following
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <strong id="booksReadCount">
+                    0
+                </strong>
+
+                <span>
+                    Books Read
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <div>
+
+        <button
+            class="edit-button"
+            id="editProfileBtn"
+        >
+            Edit Profile
+        </button>
+
+    </div>
+
+
+</section>
+
+
+<div class="profile-tabs">
+
+
+    <button
+        class="tab-button active"
+        data-tab="posts"
+    >
+        Posts
+    </button>
+
+
+    <button
+        class="tab-button"
+        data-tab="reading"
+    >
+        Reading
+    </button>
+
+
+    <button
+        class="tab-button"
+        data-tab="bookmarks"
+    >
+        Bookmarks
+    </button>
+
+
+</div>
+
+
+<section
+    class="tab-content active"
+    id="postsTab"
+>
+
+
+    <div class="create-post">
+
+        <textarea
+            id="postText"
+            placeholder="What are you reading or thinking about?"
+        ></textarea>
+
+
+        <div class="create-post-actions">
+
+            <button
+                class="post-button"
+                id="createPostBtn"
+            >
+                Post
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="postsContainer"></div>
+
+</section>
+
+
+<section
+    class="tab-content"
+    id="readingTab"
+>
+
+    <div id="readingContainer"></div>
+
+</section>
+
+
+<section
+    class="tab-content"
+    id="bookmarksTab"
+>
+
+    <div id="bookmarksContainer"></div>
+
+</section>
+
+
+</div>
+
+</div>
+
+</main>
+
+
+<!-- =====================================================
+     EDIT PROFILE MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="editProfileModal"
+>
+
+<div class="modal-box">
+
+    <h2>
+        Edit Profile
+    </h2>
+
+
+    <div class="form-group">
+
+        <label>
+            Name
+        </label>
+
+        <input
+            id="editName"
+            type="text"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Username
+        </label>
+
+        <input
+            id="editUsername"
+            type="text"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Bio
+        </label>
+
+        <textarea
+            id="editBio"
+        ></textarea>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+        <button
+            class="cancel-button"
+            id="cancelEditBtn"
+        >
+            Cancel
+        </button>
+
+
+        <button
+            class="save-button"
+            id="saveProfileBtn"
+        >
+            Save
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const API_BASE =
+    "http://localhost:5000";
+
+
+/* =====================================================
+   GET TOKEN
+===================================================== */
+
+function getToken() {
+
+    return (
+        localStorage.getItem("token") ||
+
+        localStorage.getItem("readliveToken") ||
+
+        localStorage.getItem("authToken") ||
+
+        localStorage.getItem("readliveAuthToken") ||
+
+        localStorage.getItem("jwtToken") ||
+
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   GET STORED USER
+===================================================== */
+
+function getStoredUser() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "readliveCurrentUser"
+            )
+        ) || null;
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE USER
+===================================================== */
+
+function saveCurrentUser(user) {
+
+    localStorage.setItem(
+        "readliveCurrentUser",
+        JSON.stringify(user)
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   LOAD USER FROM BACKEND
+===================================================== */
+
+async function loadProfile() {
+
+    const token =
+        getToken();
+
+
+    /*
+       First try MongoDB.
+    */
+
+    if (token) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE}/api/auth/me`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            if (response.ok) {
+
+                const user =
+                    await response.json();
+
+
+                saveCurrentUser(user);
+
+                displayProfile(user);
+
+                return;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Backend profile error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+       Fallback to stored user.
+    */
+
+    const storedUser =
+        getStoredUser();
+
+
+    if (storedUser) {
+
+        displayProfile(
+            storedUser
+        );
+
+        return;
+
+    }
+
+
+    /*
+       No login information.
+    */
+
+    alert(
+        "Please login first."
+    );
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =====================================================
+   DISPLAY PROFILE
+===================================================== */
+
+function displayProfile(user) {
+
+    const name =
+        user.name ||
+        user.username ||
+        "User";
+
+
+    const username =
+        user.username ||
+        "user";
+
+
+    const bio =
+        user.bio ||
+        "Book lover 📚 | Always learning | Exploring new stories";
+
+
+    const firstLetter =
+        name
+            .charAt(0)
+            .toUpperCase();
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "profileUsername"
+    ).textContent =
+        "@" + username;
+
+
+    document.getElementById(
+        "profileBio"
+    ).textContent =
+        bio;
+
+
+    document.getElementById(
+        "profileAvatar"
+    ).textContent =
+        firstLetter;
+
+
+    document.getElementById(
+        "topProfile"
+    ).textContent =
+        firstLetter;
+
+
+    document.getElementById(
+        "followersCount"
+    ).textContent =
+        user.followers || 0;
+
+
+    document.getElementById(
+        "followingCount"
+    ).textContent =
+        user.following || 0;
+
+
+    document.getElementById(
+        "booksReadCount"
+    ).textContent =
+        user.booksRead || 0;
+
+}
+
+
+/* =====================================================
+   TOP PROFILE BUTTON
+===================================================== */
+
+document
+    .getElementById("topProfile")
+    .addEventListener(
+        "click",
+        function() {
+
+            window.location.href =
+                "profile.html";
+
+        }
+    );
+
+
+/* =====================================================
+   NOTIFICATIONS
+===================================================== */
+
+document
+    .getElementById("notificationBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            window.location.href =
+                "notifications.html";
+
+        }
+    );
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+document
+    .getElementById("messagesBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            window.location.href =
+                "live-sessions.html";
+
+        }
+    );
+
+
+/* =====================================================
+   GLOBAL SEARCH
+===================================================== */
+
+document
+    .getElementById("globalSearch")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key !== "Enter") {
+                return;
+            }
+
+
+            const query =
+                this.value.trim();
+
+
+            if (!query) {
+                return;
+            }
+
+
+            localStorage.setItem(
+                "readliveSearchQuery",
+                query
+            );
+
+
+            window.location.href =
+                "search.html";
+
+        }
+    );
+
+
+/* =====================================================
+   EDIT PROFILE
+===================================================== */
+
+const modal =
+    document.getElementById(
+        "editProfileModal"
+    );
+
+
+document
+    .getElementById("editProfileBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            const user =
+                getStoredUser();
+
+
+            if (!user) {
+
+                alert(
+                    "User information not available."
+                );
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "editName"
+            ).value =
+                user.name ||
+                user.username ||
+                "";
+
+
+            document.getElementById(
+                "editUsername"
+            ).value =
+                user.username ||
+                "";
+
+
+            document.getElementById(
+                "editBio"
+            ).value =
+                user.bio ||
+                "";
+
+
+            modal.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   CANCEL EDIT
+===================================================== */
+
+document
+    .getElementById("cancelEditBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            modal.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   SAVE PROFILE TO MONGODB
+===================================================== */
+
+document
+    .getElementById("saveProfileBtn")
+    .addEventListener(
+        "click",
+        async function() {
+
+            const token =
+                getToken();
+
+
+            if (!token) {
+
+                alert(
+                    "Login session not found. Please login again."
+                );
+
+                return;
+
+            }
+
+
+            const name =
+                document.getElementById(
+                    "editName"
+                ).value.trim();
+
+
+            const username =
+                document.getElementById(
+                    "editUsername"
+                ).value.trim();
+
+
+            const bio =
+                document.getElementById(
+                    "editBio"
+                ).value.trim();
+
+
+            if (!name || !username) {
+
+                alert(
+                    "Name and username are required."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE}/api/auth/me`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${token}`
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    name:
+                                        name,
+
+                                    username:
+                                        username,
+
+                                    bio:
+                                        bio
+
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(
+                        data.message ||
+                        "Profile update failed."
+                    );
+
+                    return;
+
+                }
+
+
+                saveCurrentUser(
+                    data.user
+                );
+
+
+                displayProfile(
+                    data.user
+                );
+
+
+                modal.classList.remove(
+                    "show"
+                );
+
+
+                alert(
+                    "Profile updated successfully!"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Profile update error:",
+                    error
+                );
+
+
+                alert(
+                    "Cannot connect to ReadLive server."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+
+            localStorage.removeItem(
+                "readliveCurrentUser"
+            );
+
+
+            localStorage.removeItem(
+                "token"
+            );
+
+
+            localStorage.removeItem(
+                "readliveToken"
+            );
+
+
+            localStorage.removeItem(
+                "authToken"
+            );
+
+
+            localStorage.removeItem(
+                "readliveAuthToken"
+            );
+
+
+            localStorage.removeItem(
+                "jwtToken"
+            );
+
+
+            localStorage.removeItem(
+                "readliveCurrentLiveSession"
+            );
+
+
+            sessionStorage.removeItem(
+                "readliveCurrentLiveSession"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+    );
+
+
+/* =====================================================
+   POSTS
+===================================================== */
+
+function getPosts() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "readlivePosts"
+        )
+    ) || [];
+
+}
+
+
+function renderPosts() {
+
+    const container =
+        document.getElementById(
+            "postsContainer"
+        );
+
+
+    const user =
+        getStoredUser();
+
+
+    if (!user) {
+
+        container.innerHTML =
+            `<div class="empty-box">
+                Please login to view posts.
+             </div>`;
+
+        return;
+
+    }
+
+
+    const posts =
+        getPosts().filter(
+            post =>
+                post.userId === user.id ||
+                post.username === user.username ||
+                post.email === user.email
+        );
+
+
+    if (posts.length === 0) {
+
+        container.innerHTML =
+            `<div class="empty-box">
+                You have not created any posts yet.
+             </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        posts
+            .slice()
+            .reverse()
+            .map(post => {
+
+                const name =
+                    post.name ||
+                    user.name ||
+                    user.username ||
+                    "User";
+
+
+                const text =
+                    post.text ||
+                    post.content ||
+                    "";
+
+
+                return `
+
+                    <div class="post-card">
+
+                        <div class="post-user">
+
+                            <div class="small-avatar">
+                                ${escapeHTML(
+                                    name.charAt(0)
+                                )}
+                            </div>
+
+                            <div>
+
+                                <div class="post-user-name">
+                                    ${escapeHTML(name)}
+                                </div>
+
+                                <div class="post-time">
+                                    @${escapeHTML(
+                                        user.username
+                                    )}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="post-text">
+                            ${escapeHTML(text)}
+                        </div>
+
+
+                        <div class="post-actions">
+                            <span>♡ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ Share</span>
+                        </div>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =====================================================
+   CREATE POST
+===================================================== */
+
+document
+    .getElementById("createPostBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            const user =
+                getStoredUser();
+
+
+            const textarea =
+                document.getElementById(
+                    "postText"
+                );
+
+
+            const text =
+                textarea.value.trim();
+
+
+            if (!user) {
+
+                alert(
+                    "Please login first."
+                );
+
+                return;
+
+            }
+
+
+            if (!text) {
+
+                alert(
+                    "Please write something."
+                );
+
+                return;
+
+            }
+
+
+            const posts =
+                getPosts();
+
+
+            posts.push({
+
+                id:
+                    Date.now(),
+
+                userId:
+                    user.id,
+
+                name:
+                    user.name ||
+                    user.username,
+
+                username:
+                    user.username,
+
+                email:
+                    user.email,
+
+                text:
+                    text,
+
+                date:
+                    new Date().toLocaleString()
+
+            });
+
+
+            localStorage.setItem(
+                "readlivePosts",
+                JSON.stringify(posts)
+            );
+
+
+            textarea.value = "";
+
+
+            renderPosts();
+
+        }
+    );
+
+
+/* =====================================================
+   READING
+===================================================== */
+
+function renderReading() {
+
+    const container =
+        document.getElementById(
+            "readingContainer"
+        );
+
+
+    const book =
+        JSON.parse(
+            localStorage.getItem(
+                "readliveSelectedBook"
+            )
+        );
+
+
+    if (!book) {
+
+        container.innerHTML =
+            `<div class="empty-box">
+                You are not currently reading a book.
+             </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="reading-card">
+
+            <div class="reading-title">
+
+                ${escapeHTML(
+                    book.title ||
+                    "Untitled Book"
+                )}
+
+            </div>
+
+            <div class="reading-author">
+
+                ${escapeHTML(
+                    book.author ||
+                    "Unknown Author"
+                )}
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    style="width:0%"
+                ></div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   BOOKMARKS
+===================================================== */
+
+function renderBookmarks() {
+
+    const container =
+        document.getElementById(
+            "bookmarksContainer"
+        );
+
+
+    const bookmarks =
+        JSON.parse(
+            localStorage.getItem(
+                "readliveBookmarks"
+            )
+        ) || [];
+
+
+    if (!bookmarks.length) {
+
+        container.innerHTML =
+            `<div class="empty-box">
+                You have no bookmarked books yet.
+             </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        bookmarks
+            .map(book => `
+
+                <div class="bookmark-card">
+
+                    <div>
+
+                        <div class="bookmark-title">
+
+                            ${escapeHTML(
+                                book.title ||
+                                "Untitled Book"
+                            )}
+
+                        </div>
+
+                        <div class="bookmark-author">
+
+                            ${escapeHTML(
+                                book.author ||
+                                "Unknown Author"
+                            )}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `)
+            .join("");
+
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+document
+    .querySelectorAll(".tab-button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                const tab =
+                    this.dataset.tab;
+
+
+                document
+                    .querySelectorAll(
+                        ".tab-button"
+                    )
+                    .forEach(btn =>
+                        btn.classList.remove(
+                            "active"
+                        )
+                    );
+
+
+                document
+                    .querySelectorAll(
+                        ".tab-content"
+                    )
+                    .forEach(content =>
+                        content.classList.remove(
+                            "active"
+                        )
+                    );
+
+
+                this.classList.add(
+                    "active"
+                );
+
+
+                document
+                    .getElementById(
+                        tab + "Tab"
+                    )
+                    .classList.add(
+                        "active"
+                    );
+
+
+                if (tab === "posts") {
+                    renderPosts();
+                }
+
+                if (tab === "reading") {
+                    renderReading();
+                }
+
+                if (tab === "bookmarks") {
+                    renderBookmarks();
+                }
+
+            }
+        );
+
+    });
+
+
+/* =====================================================
+   NOTIFICATION COUNT
+===================================================== */
+
+function updateNotificationCount() {
+
+    const count =
+        Number(
+            localStorage.getItem(
+                "readliveUnreadNotifications"
+            )
+        ) || 0;
+
+
+    document.getElementById(
+        "notificationCount"
+    ).textContent =
+        count;
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadProfile();
+
+renderPosts();
+
+updateNotificationCount();
+
+</script>
+
+</body>
+
+</html>

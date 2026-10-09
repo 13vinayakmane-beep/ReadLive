@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ReadLive - Add Story</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .add-story-page {
+            padding: 30px;
+        }
+
+        .add-story-page h1 {
+            color: #6c4ab6;
+            margin-bottom: 25px;
+        }
+
+        .story-box {
+            width: 500px;
+            max-width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-sizing: border-box;
+        }
+
+        .story-box textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            resize: none;
+            font-size: 16px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .publish-button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #6c4ab6;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .publish-button:hover {
+            background: #58389d;
+        }
+
+        .back-button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background: #ddd;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Read<span>Live</span>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="home.html" class="side-link">
+                🏠
+                <span>Home</span>
+            </a>
+
+            <a href="books.html" class="side-link">
+                📚
+                <span>Books</span>
+            </a>
+
+            <a href="live-sessions.html" class="side-link">
+                🔴
+                <span>Live Sessions</span>
+            </a>
+
+            <a href="search.html" class="side-link">
+                🔍
+                <span>Search</span>
+            </a>
+
+            <a href="notifications.html" class="side-link">
+                🔔
+                <span>Notifications</span>
+            </a>
+
+            <a href="profile.html" class="side-link">
+                👤
+                <span>Profile</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- MAIN AREA -->
+
+    <div class="main-area">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="search-box">
+
+                🔍
+
+                <input
+                    type="text"
+                    placeholder="Search books, users..."
+                >
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button>
+                    🔔
+                </button>
+
+                <button>
+                    💬
+                </button>
+
+                <button
+                    class="top-profile"
+                    id="topProfile">
+
+                    V
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ADD STORY PAGE -->
+
+        <main class="add-story-page">
+
+
+            <h1>
+                Add Story
+            </h1>
+
+
+            <div class="story-box">
+
+
+                <textarea
+                    id="storyText"
+                    placeholder="Write something for your story..."
+                ></textarea>
+
+
+                <button
+                    class="publish-button"
+                    onclick="publishStory()">
+
+                    Publish Story
+
+                </button>
+
+
+                <br>
+
+
+                <button
+                    class="back-button"
+                    onclick="goBack()">
+
+                    ← Back to Stories
+
+                </button>
+
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+
+        // =========================================
+        // CURRENT USER
+        // =========================================
+
+        const currentUser =
+            JSON.parse(
+                localStorage.getItem(
+                    "readliveCurrentUser"
+                )
+            );
+
+
+
+        // =========================================
+        // SHOW USER INITIAL
+        // =========================================
+
+        if (currentUser) {
+
+            const userName =
+                currentUser.name ||
+                currentUser.username ||
+                "User";
+
+
+            document.getElementById(
+                "topProfile"
+            ).textContent =
+                userName
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+
+
+        // =========================================
+        // PUBLISH STORY
+        // =========================================
+
+        function publishStory() {
+
+
+            // Check login
+
+            if (!currentUser) {
+
+                alert(
+                    "Please login first."
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            // Get story text
+
+            const storyText =
+                document.getElementById(
+                    "storyText"
+                ).value.trim();
+
+
+            // Check empty
+
+            if (
+                storyText === ""
+            ) {
+
+                alert(
+                    "Please write something first."
+                );
+
+                return;
+
+            }
+
+
+            // Get existing stories
+
+            const stories =
+                JSON.parse(
+                    localStorage.getItem(
+                        "readliveStories"
+                    )
+                ) || [];
+
+
+            // Create new story
+
+            const newStory = {
+
+                id:
+                    Date.now(),
+
+                user:
+                    currentUser.name ||
+                    currentUser.username ||
+                    "User",
+
+                username:
+                    currentUser.username ||
+                    "user",
+
+                text:
+                    storyText,
+
+                date:
+                    new Date()
+                        .toLocaleDateString()
+
+            };
+
+
+            // Add story
+
+            stories.push(
+                newStory
+            );
+
+
+            // Save stories
+
+            localStorage.setItem(
+                "readliveStories",
+                JSON.stringify(
+                    stories
+                )
+            );
+
+
+            // Save latest story separately
+
+            localStorage.setItem(
+                "readliveMyStory",
+                JSON.stringify(
+                    newStory
+                )
+            );
+
+
+            // Success message
+
+            alert(
+                "Story published successfully!"
+            );
+
+
+            // Go to Home
+
+            window.location.href =
+                "home.html";
+
+        }
+
+
+
+        // =========================================
+        // BACK TO STORIES
+        // =========================================
+
+        function goBack() {
+
+            window.location.href =
+                "stories.html";
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

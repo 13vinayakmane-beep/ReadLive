@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReadLive - Reader</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f6f4ff;color:#242238;font-family:Arial,sans-serif}
+button{font-family:Arial,sans-serif}
+.topbar{min-height:90px;background:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:15px;padding:14px 32px;border-bottom:1px solid #eeeaf8;position:sticky;top:0;z-index:10}
+.back-btn,.bookmark-btn{padding:12px 18px;background:#fff;color:#6548f5;border:2px solid #6548f5;border-radius:12px;font-weight:bold;cursor:pointer}
+.back-btn{justify-self:start}
+.top-title{text-align:center;min-width:0}
+.top-title h1{margin:0;font-size:23px}
+.top-title p{margin:4px 0 0;color:#77738a}
+.live-btn-area{justify-self:end}
+.live-btn,.retry-btn{padding:13px 20px;background:#6548f5;color:#fff;border:0;border-radius:12px;font-weight:bold;cursor:pointer}
+.live-btn:disabled{opacity:.7;cursor:wait}
+.live-dot{display:inline-block;width:10px;height:10px;background:#fff;border-radius:50%;margin-right:8px}
+.book-info,.reader-layout{max-width:1500px;margin:25px auto 0;padding:0 30px}
+.book-info-card{background:#fff;border-radius:18px;padding:22px 28px;display:flex;align-items:center;gap:24px;box-shadow:0 5px 20px #32236410}
+.small-cover,.small-cover-placeholder{width:80px;height:105px;object-fit:cover;border-radius:7px;background:#eeeaff;flex-shrink:0}
+.small-cover-placeholder{display:flex;align-items:center;justify-content:center;color:#6548f5;font-weight:bold;text-align:center;padding:8px}
+.book-info-text{flex:1;min-width:0}
+.book-info-text h2{margin:0 0 7px;font-size:22px}
+.book-info-text p{margin:4px 0;color:#6e6a7d;line-height:1.5}
+.book-category{display:inline-block;margin-top:7px;padding:5px 11px;background:#eeeaff;color:#6548f5;border-radius:20px;font-size:12px;font-weight:bold}
+.bookmark-btn.saved{background:#6548f5;color:white}
+.reader-layout{margin-top:25px;padding-bottom:40px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px}
+.reader-main{min-width:0}
+.reading-header{display:flex;justify-content:space-between;align-items:center;padding:0 5px 13px;gap:10px}
+.chapter-title{color:#6548f5;font-size:18px;font-weight:bold}
+.page-number{font-size:15px;font-weight:bold;white-space:nowrap}
+.reading-page{background:#fffdf4;border:1px solid #e9e1c8;border-radius:15px;height:650px;padding:45px 60px;overflow-y:auto;box-shadow:0 3px 15px #3228640a}
+.reading-content{max-width:750px;margin:0 auto;color:#292724;font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.8;text-align:justify;overflow-wrap:anywhere}
+.reading-content p{margin:0 0 18px;text-indent:30px}
+.reading-content p:first-child{text-indent:0}
+.reading-content h1,.reading-content h2,.reading-content h3,.reading-content h4{text-align:center;text-indent:0;margin:10px 0 25px;line-height:1.4}
+.reading-content img{display:block;max-width:100%;max-height:400px;margin:20px auto}
+.cover-page{min-height:530px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:15px}
+.cover-page img,.cover-placeholder{width:260px;min-height:360px;object-fit:cover;border-radius:8px;box-shadow:0 10px 30px #0002}
+.cover-placeholder{background:linear-gradient(145deg,#eee9ff,#fff);border:1px solid #d8cff8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:25px;box-shadow:none}
+.cover-placeholder h2{font-family:Georgia,serif;font-size:28px;margin:0}
+.cover-placeholder p{color:#77738a}
+.page-controls,.chapter-controls{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:16px}
+.page-btn,.chapter-btn{min-height:49px;border-radius:12px;font-size:15px;font-weight:bold;cursor:pointer}
+.previous-btn,.chapter-btn{background:#fff;color:#6548f5;border:2px solid #d7cff8}
+.next-btn{background:#6548f5;color:#fff;border:2px solid #6548f5}
+.page-btn:disabled,.chapter-btn:disabled{opacity:.4;cursor:not-allowed}
+.index-card{background:#fff;border-radius:20px;padding:25px 20px;height:735px;position:sticky;top:110px;overflow:hidden;box-shadow:0 5px 20px #32236412}
+.index-card h2{margin:0 12px 18px;font-size:25px}
+.index-list{height:calc(100% - 55px);overflow-y:auto;padding-right:4px}
+.index-item{min-height:60px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #eeeaf7;border-radius:12px;cursor:pointer}
+.index-item:hover{background:#f8f6ff}
+.index-item.active{background:#eeeaff;border:2px solid #6548f5;padding:8px 10px}
+.index-name{min-width:0}
+.index-chapter{color:#6548f5;font-size:12px;font-weight:bold;display:block;margin-bottom:3px}
+.index-title{font-size:14px;font-weight:600;line-height:1.35}
+.index-page{color:#6d6880;font-size:13px;white-space:nowrap}
+.loading,.error{text-align:center;padding:70px 15px;color:#77738a;font-family:Arial,sans-serif}
+.error{color:#a33143}
+.error .retry-btn{margin-top:14px}
+@media(max-width:1000px){.reader-layout{grid-template-columns:1fr}.index-card{position:static;height:400px}.index-list{height:calc(100% - 55px)}}
+@media(max-width:650px){.topbar{grid-template-columns:auto 1fr;gap:10px;padding:12px;min-height:0}.back-btn{padding:9px 10px;font-size:12px}.top-title{grid-column:1/-1;grid-row:1;text-align:center}.top-title h1{font-size:17px}.top-title p{font-size:12px}.back-btn{grid-column:1;grid-row:2}.live-btn-area{grid-column:2;grid-row:2}.live-btn{padding:10px;font-size:12px}.book-info,.reader-layout{padding-left:12px;padding-right:12px}.book-info-card{padding:14px;gap:12px;flex-wrap:wrap}.small-cover,.small-cover-placeholder{display:none}.book-info-text{flex-basis:100%}.bookmark-btn{margin-left:auto}.reading-page{height:600px;padding:28px 20px}.reading-content{font-size:17px;line-height:1.7}.page-controls,.chapter-controls{gap:8px}.page-btn,.chapter-btn{font-size:12px;padding:8px 4px}}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+    <button class="back-btn" onclick="goBack()">← Back to Books</button>
+    <div class="top-title">
+        <h1 id="topBookTitle">Loading...</h1>
+        <p id="topBookAuthor">Loading...</p>
+    </div>
+    <div class="live-btn-area">
+        <button class="live-btn" id="startLiveBtn" onclick="startLiveSession()">
+            <span class="live-dot"></span>Start Live Session
+        </button>
+    </div>
+</header>
+
+<section class="book-info">
+    <div class="book-info-card">
+        <div id="smallCoverContainer">
+            <div class="small-cover-placeholder">Book</div>
+        </div>
+        <div class="book-info-text">
+            <h2 id="infoTitle">Loading...</h2>
+            <p><strong>Author:</strong> <span id="infoAuthor">Loading...</span></p>
+            <p id="infoDescription">Loading book description...</p>
+            <span id="infoCategory" class="book-category">Fiction</span>
+        </div>
+        <button id="bookmarkBtn" class="bookmark-btn" onclick="toggleBookmark()">☆ Bookmark</button>
+    </div>
+</section>
+
+<div class="reader-layout">
+    <main class="reader-main">
+        <div class="reading-header">
+            <div id="chapterTitle" class="chapter-title">Cover</div>
+            <div id="pageNumber" class="page-number">Page 1 of 1</div>
+        </div>
+
+        <section id="readingPage" class="reading-page">
+            <div id="readingContent" class="reading-content">
+                <div class="loading">Loading book...</div>
+            </div>
+        </section>
+
+        <div class="page-controls">
+            <button id="previousBtn" class="page-btn previous-btn" onclick="previousPage()">← Previous</button>
+            <button id="nextBtn" class="page-btn next-btn" onclick="nextPage()">Next →</button>
+        </div>
+
+        <div class="chapter-controls">
+            <button id="previousChapterBtn" class="chapter-btn" onclick="previousChapter()">« Previous Chapter</button>
+            <button id="nextChapterBtn" class="chapter-btn" onclick="nextChapter()">Next Chapter »</button>
+        </div>
+    </main>
+
+    <aside class="index-card">
+        <h2>Index</h2>
+        <div id="indexList" class="index-list">
+            <div class="loading">Loading contents...</div>
+        </div>
+    </aside>
+</div>
+
+<script>
+const API_URL = "http://localhost:5000";
+
+let bookId = null;
+let book = null;
+let pages = [];
+let currentPage = 1;
+let totalPages = 1;
+let indexEntries = [];
+
+function getBookId() {
+    const params = new URLSearchParams(window.location.search);
+    const urlId = params.get("id");
+
+    if (urlId) return urlId;
+
+    try {
+        const selected = JSON.parse(
+            localStorage.getItem("readliveSelectedBook") || "null"
+        );
+
+        return selected?._id || selected?.id || null;
+    } catch {
+        return null;
+    }
+}
+
+function getPageFromURL() {
+    const page = Number(
+        new URLSearchParams(window.location.search).get("page")
+    );
+
+    return Number.isInteger(page) && page >= 1 ? page : null;
+}
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+async function loadBook() {
+    bookId = getBookId();
+
+    if (!bookId) {
+        showError("No book selected. Go back to Books and open a book first.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/books/${encodeURIComponent(bookId)}/reader-data`
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(
+                data.message || "Unable to load book. Check the backend reader-data route."
+            );
+        }
+
+        book = data.book || data;
+
+        if (!book || !book.title) {
+            throw new Error("The server did not return book information.");
+        }
+
+        displayBookInformation();
+        createPages();
+        createIndex();
+
+        const urlPage = getPageFromURL();
+        const savedPage = Number(
+            localStorage.getItem(`readliveReaderPage_${bookId}`)
+        );
+
+        currentPage =
+            urlPage >= 1 && urlPage <= totalPages
+                ? urlPage
+                : savedPage >= 1 && savedPage <= totalPages
+                    ? savedPage
+                    : 1;
+
+        renderPage();
+
+    } catch (error) {
+        console.error("Load book error:", error);
+        showError(error.message || "Unable to load book.");
+    }
+}
+
+function displayBookInformation() {
+    document.title = `${book.title} - ReadLive`;
+
+    ["topBookTitle", "infoTitle"].forEach(id => {
+        document.getElementById(id).textContent = book.title || "Untitled";
+    });
+
+    ["topBookAuthor", "infoAuthor"].forEach(id => {
+        document.getElementById(id).textContent = book.author || "Unknown Author";
+    });
+
+    document.getElementById("infoDescription").textContent =
+        book.description || "No description available.";
+
+    document.getElementById("infoCategory").textContent =
+        book.category || "Fiction";
+
+    displaySmallCover();
+    checkBookmark();
+}
+
+function displaySmallCover() {
+    const container = document.getElementById("smallCoverContainer");
+
+    if (!book.coverImage) {
+        container.innerHTML = `
+            <div class="small-cover-placeholder">
+                ${escapeHTML(book.title || "Book")}
+            </div>
+        `;
+        return;
+    }
+
+    const image = document.createElement("img");
+    image.className = "small-cover";
+    image.src = book.coverImage;
+    image.alt = `${book.title || "Book"} cover`;
+
+    image.onerror = () => {
+        container.innerHTML = `
+            <div class="small-cover-placeholder">
+                ${escapeHTML(book.title || "Book")}
+            </div>
+        `;
+    };
+
+    container.innerHTML = "";
+    container.appendChild(image);
+}
+
+function createPages() {
+    pages = [{
+        type: "cover",
+        chapterIndex: -1,
+        title: "Cover",
+        chapterNumber: null,
+        html: ""
+    }];
+
+    const chapters = Array.isArray(book.chapters) ? book.chapters : [];
+
+    chapters.forEach((chapter, chapterIndex) => {
+        const html = chapter.content || "";
+        if (!html.trim()) return;
+
+        const chapterPages = splitIntoPages(html);
+
+        chapterPages.forEach((pageHTML, pageIndex) => {
+            pages.push({
+                type: "chapter",
+                chapterIndex,
+                chapterNumber: chapter.chapterNumber || chapterIndex + 1,
+                title: chapter.title || `Chapter ${chapter.chapterNumber || chapterIndex + 1}`,
+                html: pageHTML,
+                pageInChapter: pageIndex + 1,
+                chapterPageCount: chapterPages.length
+            });
+        });
+    });
+
+    totalPages = Math.max(pages.length, 1);
+}
+
+function splitIntoPages(html) {
+    const temporary = document.createElement("div");
+    temporary.innerHTML = html;
+
+    temporary.querySelectorAll(
+        "script,style,noscript,nav,iframe,object,embed"
+    ).forEach(element => element.remove());
+
+    const elements = Array.from(temporary.children);
+
+    if (!elements.length) {
+        const text = temporary.textContent.trim();
+        return text ? splitText(text) : [];
+    }
+
+    const result = [];
+    let current = [];
+    let wordCount = 0;
+    const WORDS_PER_PAGE = 240;
+
+    elements.forEach(element => {
+        const count = (element.textContent.trim().match(/\S+/g) || []).length;
+
+        if (current.length && wordCount + count > WORDS_PER_PAGE) {
+            result.push(current.map(item => item.outerHTML).join(""));
+            current = [];
+            wordCount = 0;
+        }
+
+        current.push(element.cloneNode(true));
+        wordCount += count;
+    });
+
+    if (current.length) {
+        result.push(current.map(item => item.outerHTML).join(""));
+    }
+
+    return result;
+}
+
+function splitText(text) {
+    const words = text.split(/\s+/).filter(Boolean);
+    const result = [];
+    const size = 240;
+
+    for (let i = 0; i < words.length; i += size) {
+        result.push(
+            `<p>${escapeHTML(words.slice(i, i + size).join(" "))}</p>`
+        );
+    }
+
+    return result;
+}
+
+function createIndex() {
+    const list = document.getElementById("indexList");
+
+    indexEntries = [{
+        title: "Cover",
+        page: 1,
+        chapterIndex: -1,
+        chapterNumber: null
+    }];
+
+    const frontMatter = [
+        "title page", "titlepage", "half title", "half-title",
+        "halftitlepage", "copyright", "contents",
+        "table of contents", "toc", "introduction", "preface",
+        "dedication", "epigraph", "frontispiece", "imprint",
+        "colophon", "uncopyright", "list of illustrations",
+        "list of figures", "list of plates", "illustrations",
+        "publisher", "acknowledgments", "acknowledgements"
+    ];
+
+    const added = new Set();
+
+    pages.forEach((page, index) => {
+        const title = String(page.title || "").toLowerCase().trim();
+
+        if (
+            page.type !== "chapter" ||
+            frontMatter.some(term => title.includes(term)) ||
+            added.has(page.chapterIndex)
+        ) {
+            return;
+        }
+
+        added.add(page.chapterIndex);
+
+        indexEntries.push({
+            title: page.title,
+            page: index + 1,
+            chapterIndex: page.chapterIndex,
+            chapterNumber: page.chapterNumber
+        });
+    });
+
+    list.innerHTML = "";
+
+    indexEntries.forEach(entry => {
+        const item = document.createElement("div");
+        item.className = "index-item";
+        item.dataset.page = entry.page;
+
+        item.innerHTML = `
+            <div class="index-name">
+                ${entry.chapterNumber
+                    ? `<span class="index-chapter">Chapter ${escapeHTML(entry.chapterNumber)}</span>`
+                    : ""}
+                <div class="index-title">${escapeHTML(entry.title)}</div>
+            </div>
+            <span class="index-page">p. ${entry.page}</span>
+        `;
+
+        item.addEventListener("click", () => goToPage(entry.page));
+        list.appendChild(item);
+    });
+}
+
+function coverMarkup() {
+    const title = escapeHTML(book?.title || "ReadLive");
+    const author = escapeHTML(book?.author || "");
+
+    if (book?.coverImage) {
+        return `
+            <div class="cover-page">
+                <img
+                    src="${escapeHTML(book.coverImage)}"
+                    alt="${title} cover"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                >
+                <div class="cover-placeholder" style="display:none">
+                    <h2>${title}</h2>
+                    <p>${author}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="cover-page">
+            <div class="cover-placeholder">
+                <h2>${title}</h2>
+                <p>${author}</p>
+            </div>
+        </div>
+    `;
+}
+
+function renderPage() {
+    const page = pages[currentPage - 1];
+    if (!page) return;
+
+    const content = document.getElementById("readingContent");
+
+    if (page.type === "cover") {
+        document.getElementById("chapterTitle").textContent = "Cover";
+        content.innerHTML = coverMarkup();
+    } else {
+        document.getElementById("chapterTitle").textContent =
+            `Chapter ${page.chapterNumber} · ${page.title}`;
+
+        content.innerHTML =
+            page.html || '<div class="loading">No content available.</div>';
+    }
+
+    document.getElementById("pageNumber").textContent =
+        `Page ${currentPage} of ${totalPages}`;
+
+    updateButtons();
+    updateIndex();
+    saveProgress();
+
+    document.getElementById("readingPage").scrollTop = 0;
+}
+
+function updateButtons() {
+    document.getElementById("previousBtn").disabled = currentPage <= 1;
+    document.getElementById("nextBtn").disabled = currentPage >= totalPages;
+
+    const current = pages[currentPage - 1];
+    const chapters = indexEntries.filter(entry => entry.chapterIndex >= 0);
+    const index = chapters.findIndex(
+        entry => entry.chapterIndex === current?.chapterIndex
+    );
+
+    document.getElementById("previousChapterBtn").disabled =
+        current?.type === "cover" || index <= 0;
+
+    document.getElementById("nextChapterBtn").disabled =
+        chapters.length === 0 ||
+        (current?.type !== "cover" && index >= chapters.length - 1);
+}
+
+function updateIndex() {
+    document.querySelectorAll(".index-item").forEach(item => {
+        const page = Number(item.dataset.page);
+        const index = indexEntries.findIndex(entry => entry.page === page);
+        const next = indexEntries[index + 1];
+
+        item.classList.toggle(
+            "active",
+            currentPage >= page && (!next || currentPage < next.page)
+        );
+    });
+}
+
+function nextPage() {
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderPage();
+    }
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderPage();
+    }
+}
+
+function nextChapter() {
+    const chapters = indexEntries.filter(entry => entry.chapterIndex >= 0);
+    if (!chapters.length) return;
+
+    const current = pages[currentPage - 1];
+
+    if (current?.type === "cover") {
+        goToPage(chapters[0].page);
+        return;
+    }
+
+    const index = chapters.findIndex(
+        entry => entry.chapterIndex === current?.chapterIndex
+    );
+
+    if (index >= 0 && index < chapters.length - 1) {
+        goToPage(chapters[index + 1].page);
+    }
+}
+
+function previousChapter() {
+    const chapters = indexEntries.filter(entry => entry.chapterIndex >= 0);
+    if (!chapters.length) return;
+
+    const current = pages[currentPage - 1];
+    const index = chapters.findIndex(
+        entry => entry.chapterIndex === current?.chapterIndex
+    );
+
+    if (index < 0) return;
+
+    if (index === 0) {
+        if (currentPage > chapters[0].page) {
+            goToPage(chapters[0].page);
+        }
+        return;
+    }
+
+    goToPage(chapters[index - 1].page);
+}
+
+function goToPage(page) {
+    page = Number(page);
+
+    if (!Number.isInteger(page) || page < 1 || page > totalPages) return;
+
+    currentPage = page;
+    renderPage();
+}
+
+function saveProgress() {
+    if (!bookId) return;
+
+    localStorage.setItem(
+        `readliveReaderPage_${bookId}`,
+        String(currentPage)
+    );
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("id", bookId);
+    url.searchParams.set("page", currentPage);
+
+    window.history.replaceState({}, "", url.toString());
+}
+
+function getBookmarks() {
+    try {
+        return JSON.parse(localStorage.getItem("readliveBookmarks") || "[]");
+    } catch {
+        return [];
+    }
+}
+
+function checkBookmark() {
+    const saved = getBookmarks().some(
+        item => String(item.bookId) === String(bookId)
+    );
+
+    const button = document.getElementById("bookmarkBtn");
+    button.classList.toggle("saved", saved);
+    button.textContent = saved ? "★ Bookmarked" : "☆ Bookmark";
+}
+
+function toggleBookmark() {
+    if (!bookId || !book) return;
+
+    let bookmarks = getBookmarks();
+
+    const index = bookmarks.findIndex(
+        item => String(item.bookId) === String(bookId)
+    );
+
+    if (index >= 0) {
+        bookmarks.splice(index, 1);
+    } else {
+        bookmarks.push({
+            bookId,
+            title: book.title,
+            author: book.author,
+            coverImage: book.coverImage,
+            page: currentPage,
+            savedAt: new Date().toISOString()
+        });
+    }
+
+    localStorage.setItem("readliveBookmarks", JSON.stringify(bookmarks));
+    checkBookmark();
+}
+
+// =============================================
+// START LIVE SESSION — SAVE IN MONGODB
+// =============================================
+
+async function startLiveSession() {
+    if (!book) {
+        alert("Please wait until the book has loaded.");
+        return;
+    }
+
+    const button = document.getElementById("startLiveBtn");
+    button.disabled = true;
+    button.innerHTML = "Creating Session...";
+
+    try {
+        let user = null;
+
+        try {
+            user = JSON.parse(
+                localStorage.getItem("readliveCurrentUser") ||
+                localStorage.getItem("user") ||
+                "null"
+            );
+        } catch {
+            user = null;
+        }
+
+        if (!user) {
+            alert("Please log in before starting a live session.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const current = pages[currentPage - 1];
+
+        const host =
+            user.name ||
+            user.username ||
+            user.email ||
+            "ReadLive Host";
+
+        const response = await fetch(`${API_URL}/api/live-sessions`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: `${book.title} - Live Reading`,
+                book: book.title,
+                bookId: String(book._id || bookId),
+                description:
+                    `Live reading session for ${book.title}` +
+                    (current?.type === "chapter" ? ` — ${current.title}` : ""),
+                host,
+                hostId: String(user._id || user.id || user.userId || ""),
+                maxParticipants: 10
+            })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.session || !data.session._id) {
+            throw new Error(
+                data.message || "The server did not return the saved session."
+            );
+        }
+
+        const savedSession = {
+            ...data.session,
+            id: data.session._id,
+            chapter: current?.type === "cover"
+                ? "Cover"
+                : `Chapter ${current?.chapterNumber || ""} · ${current?.title || ""}`,
+            page: currentPage,
+            currentPage
+        };
+
+        let sessions = [];
+
+        try {
+            sessions = JSON.parse(
+                localStorage.getItem("readliveLiveSessions") || "[]"
+            );
+        } catch {
+            sessions = [];
+        }
+
+        sessions.unshift(savedSession);
+
+        localStorage.setItem(
+            "readliveLiveSessions",
+            JSON.stringify(sessions)
+        );
+
+        localStorage.setItem(
+            "readliveCurrentLiveSession",
+            JSON.stringify(savedSession)
+        );
+
+        localStorage.setItem("readliveCurrentLiveRole", "host");
+
+        // The room receives the real MongoDB session ID.
+        window.location.href =
+            `live-room.html?id=${encodeURIComponent(data.session._id)}`;
+
+    } catch (error) {
+        console.error("Start live session error:", error);
+
+        alert(
+            "Could not create the live session.\n\n" +
+            error.message +
+            "\n\nCheck that the backend is running and MongoDB is connected."
+        );
+    } finally {
+        button.disabled = false;
+        button.innerHTML = '<span class="live-dot"></span>Start Live Session';
+    }
+}
+
+function goBack() {
+    window.location.href = "books.html";
+}
+
+function showError(message) {
+    document.getElementById("readingContent").innerHTML = `
+        <div class="error">
+            ${escapeHTML(message)}
+            <br>
+            <button class="retry-btn" onclick="loadBook()">Retry</button>
+        </div>
+    `;
+
+    document.getElementById("indexList").innerHTML =
+        '<div class="error">Unable to load contents.</div>';
+}
+
+document.addEventListener("keydown", event => {
+    if (["INPUT", "TEXTAREA"].includes(event.target.tagName)) return;
+
+    if (event.shiftKey && event.key === "ArrowRight") {
+        event.preventDefault();
+        nextChapter();
+        return;
+    }
+
+    if (event.shiftKey && event.key === "ArrowLeft") {
+        event.preventDefault();
+        previousChapter();
+        return;
+    }
+
+    if (event.key === "ArrowRight") {
+        event.preventDefault();
+        nextPage();
+    }
+
+    if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        previousPage();
+    }
+});
+
+loadBook();
+</script>
+</body>
+</html>

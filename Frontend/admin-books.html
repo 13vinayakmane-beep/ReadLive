@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Manage Books - ReadLive</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f6f4ff;
+            color: #222;
+        }
+
+        /* ==============================
+           ADMIN SIDEBAR
+        ============================== */
+
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 230px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e8e8e8;
+            padding: 28px 15px;
+            z-index: 1000;
+        }
+
+        .admin-logo {
+            font-size: 27px;
+            font-weight: 800;
+            color: #6c4cff;
+            padding: 0 15px;
+            margin-bottom: 8px;
+        }
+
+        .admin-logo span {
+            color: #222;
+        }
+
+        .admin-label {
+            color: #999;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 0 15px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .admin-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .admin-link:hover {
+            background: #f1edff;
+            color: #6c4cff;
+        }
+
+        .admin-link.active {
+            background: #eee9ff;
+            color: #6c4cff;
+        }
+
+        .admin-logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+            color: #e53935;
+        }
+
+        .admin-logout:hover {
+            background: #fff0f0;
+            color: #e53935;
+        }
+
+
+        /* ==============================
+           MAIN
+        ============================== */
+
+        .main {
+            margin-left: 230px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+
+        /* ==============================
+           TOP BAR
+        ============================== */
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .top-bar h1 {
+            font-size: 28px;
+        }
+
+        .add-btn {
+            background: #6c4cff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: #5738e8;
+        }
+
+
+        /* ==============================
+           FORM
+        ============================== */
+
+        .book-form {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .book-form.show {
+            display: block;
+        }
+
+        .book-form h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / 3;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save-btn:hover {
+            background: #219653;
+        }
+
+        .save-btn:disabled {
+            background: #95d5b2;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #555;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+
+        /* ==============================
+           BOOK SEARCH
+        ============================== */
+
+        .book-search-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .book-search-section label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .book-search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .book-search-input {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .book-search-input:focus {
+            border-color: #6c4cff;
+        }
+
+        .search-book-btn {
+            background: #6c4cff;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-book-btn:hover {
+            background: #5738e8;
+        }
+
+        .search-book-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .search-status {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #777;
+            display: none;
+        }
+
+        .search-status.show {
+            display: block;
+        }
+
+        .search-results {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-results-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .search-result-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .search-result-image {
+            width: 55px;
+            height: 70px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .search-result-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .search-result-info {
+            flex: 1;
+        }
+
+        .search-result-info h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .search-result-author {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .search-result-source {
+            color: #666;
+            font-size: 11px;
+        }
+
+        .rights-allowed {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .rights-blocked {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .import-book-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .import-book-btn:hover {
+            background: #219653;
+        }
+
+        .import-book-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+
+        /* ==============================
+           BOOKS
+        ============================== */
+
+        .books-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .books-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .books-header h2 {
+            font-size: 20px;
+        }
+
+        .book-count {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .book-image {
+            width: 100%;
+            height: 230px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            overflow: hidden;
+        }
+
+        .book-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-info {
+            padding: 15px;
+        }
+
+        .book-info h3 {
+            font-size: 17px;
+            margin-bottom: 7px;
+        }
+
+        .book-author {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .book-category {
+            display: inline-block;
+            background: #f0edff;
+            color: #6c4cff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .book-description {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            flex: 1;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #eef5ff;
+            color: #2878d4;
+        }
+
+        .delete-btn {
+            background: #fff0f0;
+            color: #e74c3c;
+        }
+
+
+        /* ==============================
+           EMPTY
+        ============================== */
+
+        .empty-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-message h3 {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 768px) {
+
+            .admin-sidebar {
+                width: 65px;
+                padding: 20px 8px;
+            }
+
+            .admin-logo {
+                font-size: 0;
+                text-align: center;
+            }
+
+            .admin-logo:before {
+                content: "R";
+                font-size: 25px;
+                font-weight: bold;
+            }
+
+            .admin-label {
+                display: none;
+            }
+
+            .admin-link {
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .admin-link span {
+                display: none;
+            }
+
+            .admin-logout {
+                left: 8px;
+                right: 8px;
+            }
+
+            .main {
+                margin-left: 65px;
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: 1;
+            }
+
+            .book-search-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================================
+         ADMIN SIDEBAR
+    ======================================== -->
+
+    <aside class="admin-sidebar">
+
+        <div class="admin-logo">
+            Read<span>Live</span>
+        </div>
+
+        <div class="admin-label">
+            Administrator
+        </div>
+
+        <nav class="admin-nav">
+
+            <a
+                href="admin-dashboard.html"
+                class="admin-link"
+            >
+                📊
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="admin-books.html"
+                class="admin-link active"
+            >
+                📚
+                <span>Manage Books</span>
+            </a>
+
+
+            <a
+                href="admin-users.html"
+                class="admin-link"
+            >
+                👥
+                <span>Manage Users</span>
+            </a>
+
+
+            <a
+                href="admin-live-sessions.html"
+                class="admin-link"
+            >
+                🔴
+                <span>Manage Live Sessions</span>
+            </a>
+
+
+            <a
+                href="admin-stories.html"
+                class="admin-link"
+            >
+                📖
+                <span>Stories</span>
+            </a>
+
+
+            <a
+                href="admin-settings.html"
+                class="admin-link"
+            >
+                ⚙️
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+
+        <a
+            href="login.html"
+            class="admin-link admin-logout"
+            onclick="logoutAdmin()"
+        >
+            🚪
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- ========================================
+         MAIN
+    ======================================== -->
+
+    <div class="main">
+
+
+        <!-- TOP BAR -->
+
+        <div class="top-bar">
+
+            <h1>
+                Manage Books
+            </h1>
+
+            <button
+                class="add-btn"
+                onclick="showBookForm()"
+            >
+                + Add New Book
+            </button>
+
+        </div>
+
+
+        <!-- ========================================
+             BOOK FORM
+        ======================================== -->
+
+        <div
+            class="book-form"
+            id="bookForm"
+        >
+
+            <h2 id="formTitle">
+                Add New Book
+            </h2>
+
+
+            <!-- SEARCH -->
+
+            <div class="book-search-section">
+
+                <label>
+                    Search Book
+                </label>
+
+                <div class="book-search-row">
+
+                    <input
+                        type="text"
+                        id="bookSearchInput"
+                        class="book-search-input"
+                        placeholder="Search book title or author..."
+                    >
+
+                    <button
+                        type="button"
+                        id="searchBookBtn"
+                        class="search-book-btn"
+                        onclick="searchBooks()"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="searchStatus"
+                    class="search-status"
+                >
+                </div>
+
+
+                <div
+                    id="searchResults"
+                    class="search-results"
+                >
+                </div>
+
+            </div>
+
+
+            <!-- BOOK FORM -->
+
+            <form id="bookFormElement">
+
+                <input
+                    type="hidden"
+                    id="bookId"
+                >
+
+                <input
+                    type="hidden"
+                    id="bookSource"
+                >
+
+                <input
+                    type="hidden"
+                    id="bookSourceUrl"
+                >
+
+                <input
+                    type="hidden"
+                    id="bookRightsStatus"
+                >
+
+                <input
+                    type="hidden"
+                    id="bookRightsNote"
+                >
+
+                <input
+                    type="hidden"
+                    id="bookGithubRepository"
+                >
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Book Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bookTitle"
+                            placeholder="Enter book title"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Author
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bookAuthor"
+                            placeholder="Enter author name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <select
+                            id="bookCategory"
+                            required
+                        >
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option value="Fiction">
+                                Fiction
+                            </option>
+
+                            <option value="Non-Fiction">
+                                Non-Fiction
+                            </option>
+
+                            <option value="Romance">
+                                Romance
+                            </option>
+
+                            <option value="Technology">
+                                Technology
+                            </option>
+
+                            <option value="Education">
+                                Education
+                            </option>
+
+                            <option value="Self Help">
+                                Self Help
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Book Cover URL
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bookImage"
+                            placeholder="Paste image URL"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea
+                            id="bookDescription"
+                            placeholder="Enter book description"
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        id="saveBookBtn"
+                        class="save-btn"
+                    >
+                        Save Book
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="hideBookForm()"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- ========================================
+             BOOK LIST
+        ======================================== -->
+
+        <div class="books-container">
+
+            <div class="books-header">
+
+                <h2>
+                    All Books
+                </h2>
+
+                <span
+                    class="book-count"
+                    id="bookCount"
+                >
+                    0 Books
+                </span>
+
+            </div>
+
+
+            <div
+                class="books-grid"
+                id="booksGrid"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const API_URL =
+            "http://localhost:5000";
+
+
+        let books = [];
+
+        let searchedBooks = [];
+
+
+        /* =====================================================
+           TOKEN
+        ===================================================== */
+
+        function getToken() {
+
+            return (
+                localStorage.getItem("token") ||
+                localStorage.getItem("readliveToken") ||
+                ""
+            );
+
+        }
+
+
+        /* =====================================================
+           CHECK LOGIN
+        ===================================================== */
+
+        function checkLogin() {
+
+            const token =
+                getToken();
+
+            if (!token) {
+
+                alert(
+                    "Please login as administrator."
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return false;
+
+            }
+
+            return true;
+
+        }
+
+
+        /* =====================================================
+           SHOW FORM
+        ===================================================== */
+
+        function showBookForm() {
+
+            const form =
+                document.getElementById(
+                    "bookForm"
+                );
+
+            form.classList.add("show");
+
+
+            document
+                .getElementById("formTitle")
+                .innerText =
+                    "Add New Book";
+
+
+            document
+                .getElementById("bookFormElement")
+                .reset();
+
+
+            document
+                .getElementById("bookId")
+                .value = "";
+
+
+            document
+                .getElementById("bookSource")
+                .value =
+                    "Standard Ebooks";
+
+
+            document
+                .getElementById("bookRightsStatus")
+                .value =
+                    "allowed";
+
+
+            document
+                .getElementById("bookRightsNote")
+                .value =
+                    "Standard Ebooks public-domain source. Verify applicable rights for the intended territory.";
+
+
+            document
+                .getElementById("bookGithubRepository")
+                .value = "";
+
+
+            document
+                .getElementById("searchResults")
+                .innerHTML = "";
+
+
+            document
+                .getElementById("searchResults")
+                .classList.remove("show");
+
+
+            document
+                .getElementById("searchStatus")
+                .innerText = "";
+
+
+            document
+                .getElementById("searchStatus")
+                .classList.remove("show");
+
+        }
+
+
+        /* =====================================================
+           HIDE FORM
+        ===================================================== */
+
+        function hideBookForm() {
+
+            document
+                .getElementById("bookForm")
+                .classList.remove("show");
+
+        }
+
+
+        /* =====================================================
+           SEARCH BOOKS
+        ===================================================== */
+
+        async function searchBooks() {
+
+            const input =
+                document.getElementById(
+                    "bookSearchInput"
+                );
+
+            const status =
+                document.getElementById(
+                    "searchStatus"
+                );
+
+            const results =
+                document.getElementById(
+                    "searchResults"
+                );
+
+            const searchButton =
+                document.getElementById(
+                    "searchBookBtn"
+                );
+
+
+            const query =
+                input.value.trim();
+
+
+            if (!query) {
+
+                status.innerText =
+                    "Please enter a book title or author.";
+
+                status.classList.add("show");
+
+                results.innerHTML = "";
+
+                results.classList.remove("show");
+
+                return;
+
+            }
+
+
+            const token =
+                getToken();
+
+
+            if (!token) {
+
+                alert(
+                    "Login session not found. Please login again."
+                );
+
+                return;
+
+            }
+
+
+            searchButton.disabled = true;
+
+            searchButton.innerText =
+                "Searching...";
+
+
+            status.innerText =
+                "Searching Standard Ebooks...";
+
+            status.classList.add("show");
+
+
+            results.innerHTML = "";
+
+            results.classList.remove("show");
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        API_URL +
+                        "/api/books/search/standardebooks?q=" +
+                        encodeURIComponent(query),
+
+                        {
+
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " + token,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.message ||
+                        data.error ||
+                        "Unable to search Standard Ebooks."
+
+                    );
+
+                }
+
+
+                searchedBooks =
+                    data.results || [];
+
+
+                if (
+                    searchedBooks.length === 0
+                ) {
+
+                    status.innerText =
+                        "No Standard Ebooks books found.";
+
+                    return;
+
+                }
+
+
+                status.innerText =
+                    "Search results";
+
+
+                results.classList.add(
+                    "show"
+                );
+
+
+                results.innerHTML = `
+
+                    <div class="search-results-title">
+
+                        Available Standard Ebooks
+
+                    </div>
+
+                    ${
+                        searchedBooks
+                            .map(
+                                (book, index) =>
+                                    createSearchResult(
+                                        book,
+                                        index
+                                    )
+                            )
+                            .join("")
+                    }
+
+                `;
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "BOOK SEARCH ERROR:",
+                    error
+                );
+
+
+                status.innerText =
+                    error.message ||
+                    "Unable to search books.";
+
+            }
+
+            finally {
+
+                searchButton.disabled =
+                    false;
+
+                searchButton.innerText =
+                    "Search";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           CREATE SEARCH RESULT
+        ===================================================== */
+
+        function createSearchResult(
+            book,
+            index
+        ) {
+
+            const image =
+                book.coverImage ||
+                book.image ||
+                "";
+
+
+            const imageHTML =
+                image
+
+                ?
+
+                `
+                    <img
+                        src="${escapeHTML(image)}"
+                        alt="${escapeHTML(book.title)}"
+                        onerror="this.style.display='none';"
+                    >
+                `
+
+                :
+
+                "No Image";
+
+
+            return `
+
+                <div class="search-result-card">
+
+                    <div class="search-result-image">
+
+                        ${imageHTML}
+
+                    </div>
+
+
+                    <div class="search-result-info">
+
+                        <h3>
+                            ${escapeHTML(
+                                book.title
+                            )}
+                        </h3>
+
+
+                        <div class="search-result-author">
+
+                            By
+                            ${escapeHTML(
+                                book.author ||
+                                "Unknown Author"
+                            )}
+
+                        </div>
+
+
+                        <div class="search-result-source">
+
+                            Source:
+                            ${escapeHTML(
+                                book.source ||
+                                "Standard Ebooks"
+                            )}
+
+                            <br>
+
+                            Rights:
+
+                            <span class="rights-allowed">
+
+                                ✓ Standard Ebooks / Public Domain
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="import-book-btn"
+                        id="importButton-${index}"
+                        onclick="importBook(${index})"
+                    >
+
+                        Import Book
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* =====================================================
+           IMPORT BOOK
+        ===================================================== */
+
+        function importBook(index) {
+
+            const book =
+                searchedBooks[index];
+
+
+            if (!book) {
+
+                alert(
+                    "Book information could not be found."
+                );
+
+                return;
+
+            }
+
+
+            /* TITLE */
+
+            document
+                .getElementById("bookTitle")
+                .value =
+                    book.title || "";
+
+
+            /* AUTHOR */
+
+            document
+                .getElementById("bookAuthor")
+                .value =
+                    book.author || "";
+
+
+            /* COVER */
+
+            document
+                .getElementById("bookImage")
+                .value =
+                    book.coverImage ||
+                    book.image ||
+                    "";
+
+
+            /* DESCRIPTION */
+
+            document
+                .getElementById("bookDescription")
+                .value =
+                    book.description ||
+                    `Read ${book.title} by ${book.author} on ReadLive.`;
+
+
+            /* SOURCE */
+
+            document
+                .getElementById("bookSource")
+                .value =
+                    book.source ||
+                    "Standard Ebooks";
+
+
+            /* SOURCE URL */
+
+            document
+                .getElementById("bookSourceUrl")
+                .value =
+                    book.sourceUrl ||
+                    "";
+
+
+            /* RIGHTS */
+
+            document
+                .getElementById("bookRightsStatus")
+                .value =
+                    "allowed";
+
+
+            document
+                .getElementById("bookRightsNote")
+                .value =
+                    "Standard Ebooks public-domain source. Verify applicable rights for the intended territory.";
+
+
+            /* GITHUB REPOSITORY */
+
+            document
+                .getElementById(
+                    "bookGithubRepository"
+                )
+                .value =
+                    book.githubRepository ||
+                    "";
+
+
+            /* CATEGORY */
+
+            const category =
+                document.getElementById(
+                    "bookCategory"
+                );
+
+
+            const categoryExists =
+                Array.from(
+                    category.options
+                ).some(
+                    option =>
+                        option.value ===
+                        book.category
+                );
+
+
+            if (categoryExists) {
+
+                category.value =
+                    book.category;
+
+            }
+
+            else {
+
+                category.value =
+                    "Fiction";
+
+            }
+
+
+            /* HIDE SEARCH RESULTS */
+
+            document
+                .getElementById(
+                    "searchResults"
+                )
+                .classList.remove(
+                    "show"
+                );
+
+
+            document
+                .getElementById(
+                    "searchStatus"
+                )
+                .innerText =
+                    "Book selected. Review the details and click Save Book.";
+
+
+            document
+                .getElementById(
+                    "searchStatus"
+                )
+                .classList.add(
+                    "show"
+                );
+
+
+            /*
+             * Scroll to form so user can see
+             * the imported information.
+             */
+
+            document
+                .getElementById(
+                    "bookForm"
+                )
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+        }
+
+
+        /* =====================================================
+           SAVE BOOK
+        ===================================================== */
+
+        document
+            .getElementById("bookFormElement")
+            .addEventListener(
+                "submit",
+                async function(event) {
+
+                    event.preventDefault();
+
+
+                    const saveButton =
+                        document.getElementById(
+                            "saveBookBtn"
+                        );
+
+
+                    const id =
+                        document
+                            .getElementById(
+                                "bookId"
+                            )
+                            .value
+                            .trim();
+
+
+                    const title =
+                        document
+                            .getElementById(
+                                "bookTitle"
+                            )
+                            .value
+                            .trim();
+
+
+                    const author =
+                        document
+                            .getElementById(
+                                "bookAuthor"
+                            )
+                            .value
+                            .trim();
+
+
+                    const category =
+                        document
+                            .getElementById(
+                                "bookCategory"
+                            )
+                            .value
+                            .trim();
+
+
+                    const coverImage =
+                        document
+                            .getElementById(
+                                "bookImage"
+                            )
+                            .value
+                            .trim();
+
+
+                    const description =
+                        document
+                            .getElementById(
+                                "bookDescription"
+                            )
+                            .value
+                            .trim();
+
+
+                    const source =
+                        document
+                            .getElementById(
+                                "bookSource"
+                            )
+                            .value
+                            .trim();
+
+
+                    const sourceUrl =
+                        document
+                            .getElementById(
+                                "bookSourceUrl"
+                            )
+                            .value
+                            .trim();
+
+
+                    const rightsStatus =
+                        document
+                            .getElementById(
+                                "bookRightsStatus"
+                            )
+                            .value
+                            .trim();
+
+
+                    const rightsNote =
+                        document
+                            .getElementById(
+                                "bookRightsNote"
+                            )
+                            .value
+                            .trim();
+
+
+                    const githubRepository =
+                        document
+                            .getElementById(
+                                "bookGithubRepository"
+                            )
+                            .value
+                            .trim();
+
+
+                    /* VALIDATION */
+
+                    if (
+                        !title ||
+                        !author ||
+                        !category ||
+                        !description
+                    ) {
+
+                        alert(
+                            "Please fill all required fields."
+                        );
+
+                        return;
+
+                    }
+
+
+                    const token =
+                        getToken();
+
+
+                    if (!token) {
+
+                        alert(
+                            "Login session not found. Please login again."
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Disable button so user cannot
+                     * click Save multiple times.
+                     */
+
+                    saveButton.disabled =
+                        true;
+
+
+                    saveButton.innerText =
+                        id
+                            ? "Updating..."
+                            : "Importing Book...";
+
+
+                    try {
+
+                        const bookData = {
+
+                            title,
+
+                            author,
+
+                            description,
+
+                            category,
+
+                            coverImage,
+
+                            source:
+                                source ||
+                                "Standard Ebooks",
+
+                            sourceUrl,
+
+                            rightsStatus:
+                                rightsStatus ||
+                                "allowed",
+
+                            rightsNote,
+
+                            githubRepository
+
+                        };
+
+
+                        let response;
+
+
+                        /* =====================================
+                           UPDATE EXISTING BOOK
+                        ===================================== */
+
+                        if (id) {
+
+                            response =
+                                await fetch(
+
+                                    API_URL +
+                                    "/api/books/" +
+                                    id,
+
+                                    {
+
+                                        method:
+                                            "PUT",
+
+                                        headers: {
+
+                                            "Content-Type":
+                                                "application/json",
+
+                                            "Authorization":
+                                                "Bearer " +
+                                                token
+
+                                        },
+
+                                        body:
+                                            JSON.stringify(
+                                                bookData
+                                            )
+
+                                    }
+
+                                );
+
+                        }
+
+
+                        /* =====================================
+                           ADD NEW BOOK
+                        ===================================== */
+
+                        else {
+
+                            response =
+                                await fetch(
+
+                                    API_URL +
+                                    "/api/books",
+
+                                    {
+
+                                        method:
+                                            "POST",
+
+                                        headers: {
+
+                                            "Content-Type":
+                                                "application/json",
+
+                                            "Authorization":
+                                                "Bearer " +
+                                                token
+
+                                        },
+
+                                        body:
+                                            JSON.stringify(
+                                                bookData
+                                            )
+
+                                    }
+
+                                );
+
+                        }
+
+
+                        /*
+                         * Read response safely.
+                         */
+
+                        const responseText =
+                            await response.text();
+
+
+                        let data = {};
+
+                        try {
+
+                            data =
+                                JSON.parse(
+                                    responseText
+                                );
+
+                        }
+
+                        catch (jsonError) {
+
+                            throw new Error(
+                                responseText ||
+                                "Server returned an invalid response."
+                            );
+
+                        }
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+
+                                data.message ||
+                                data.error ||
+                                "Unable to save book."
+
+                            );
+
+                        }
+
+
+                        /*
+                         * Update local book array immediately.
+                         */
+
+                        if (data.book) {
+
+                            if (id) {
+
+                                const position =
+                                    books.findIndex(
+                                        book =>
+                                            book._id ===
+                                            id
+                                    );
+
+
+                                if (
+                                    position >= 0
+                                ) {
+
+                                    books[position] =
+                                        data.book;
+
+                                }
+
+                            }
+
+                            else {
+
+                                books.unshift(
+                                    data.book
+                                );
+
+                            }
+
+                        }
+
+
+                        renderBooks();
+
+
+                        /*
+                         * Close form.
+                         */
+
+                        hideBookForm();
+
+
+                        /*
+                         * Clear search.
+                         */
+
+                        document
+                            .getElementById(
+                                "bookSearchInput"
+                            )
+                            .value = "";
+
+
+                        document
+                            .getElementById(
+                                "searchResults"
+                            )
+                            .innerHTML = "";
+
+
+                        document
+                            .getElementById(
+                                "searchResults"
+                            )
+                            .classList.remove(
+                                "show"
+                            );
+
+
+                        document
+                            .getElementById(
+                                "searchStatus"
+                            )
+                            .innerText = "";
+
+
+                        document
+                            .getElementById(
+                                "searchStatus"
+                            )
+                            .classList.remove(
+                                "show"
+                            );
+
+
+                        if (
+                            id
+                        ) {
+
+                            alert(
+                                "Book updated successfully!"
+                            );
+
+                        }
+
+                        else {
+
+                            /*
+                             * Backend has already extracted
+                             * chapters + TOC during import.
+                             */
+
+                            const chapterCount =
+                                data.chapterCount ||
+                                (
+                                    data.book &&
+                                    data.book.chapters
+                                        ? data.book.chapters.length
+                                        : 0
+                                );
+
+
+                            const tocCount =
+                                data.tocCount ||
+                                (
+                                    data.book &&
+                                    data.book.toc
+                                        ? data.book.toc.length
+                                        : 0
+                                );
+
+
+                            alert(
+
+                                "Book imported successfully!\n\n" +
+
+                                "Chapters: " +
+                                chapterCount +
+                                "\n" +
+
+                                "Table of Contents: " +
+                                tocCount
+
+                            );
+
+                        }
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            "SAVE BOOK ERROR:",
+                            error
+                        );
+
+
+                        alert(
+
+                            error.message ||
+                            "Unable to save book."
+
+                        );
+
+                    }
+
+                    finally {
+
+                        saveButton.disabled =
+                            false;
+
+                        saveButton.innerText =
+                            "Save Book";
+
+                    }
+
+                }
+            );
+
+
+        /* =====================================================
+           LOAD BOOKS
+        ===================================================== */
+
+        async function loadBooks() {
+
+            try {
+
+                const token =
+                    getToken();
+
+
+                if (!token) {
+
+                    return;
+
+                }
+
+
+                const response =
+                    await fetch(
+
+                        API_URL +
+                        "/api/books",
+
+                        {
+
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " +
+                                    token,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+
+                    );
+
+
+                const responseText =
+                    await response.text();
+
+
+                let data = [];
+
+
+                try {
+
+                    data =
+                        JSON.parse(
+                            responseText
+                        );
+
+                }
+
+                catch (error) {
+
+                    throw new Error(
+                        "Invalid server response."
+                    );
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.message ||
+                        "Unable to load books."
+
+                    );
+
+                }
+
+
+                books =
+                    Array.isArray(data)
+                        ? data
+                        : [];
+
+
+                renderBooks();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "LOAD BOOKS ERROR:",
+                    error
+                );
+
+
+                books = [];
+
+                renderBooks();
+
+            }
+
+        }
+
+
+        /* =====================================================
+           RENDER BOOKS
+        ===================================================== */
+
+        function renderBooks() {
+
+            const grid =
+                document.getElementById(
+                    "booksGrid"
+                );
+
+
+            const count =
+                document.getElementById(
+                    "bookCount"
+                );
+
+
+            count.innerText =
+                books.length +
+                (
+                    books.length === 1
+                        ? " Book"
+                        : " Books"
+                );
+
+
+            if (
+                books.length === 0
+            ) {
+
+                grid.innerHTML = `
+
+                    <div class="empty-message">
+
+                        <h3>
+                            No Books Added Yet
+                        </h3>
+
+                        <p>
+                            Click "Add New Book"
+                            to add your first book.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            grid.innerHTML =
+                books
+                    .map(
+                        book => {
+
+                            const cover =
+                                book.coverImage ||
+                                book.image ||
+                                "";
+
+
+                            return `
+
+                                <div
+                                    class="book-card"
+                                    id="book-card-${book._id}"
+                                >
+
+                                    <div class="book-image">
+
+                                        ${
+                                            cover
+
+                                            ?
+
+                                            `
+
+                                                <img
+                                                    src="${escapeHTML(
+                                                        cover
+                                                    )}"
+                                                    alt="${escapeHTML(
+                                                        book.title
+                                                    )}"
+                                                    onerror="this.style.display='none';"
+                                                >
+
+                                            `
+
+                                            :
+
+                                            "No Image"
+                                        }
+
+                                    </div>
+
+
+                                    <div class="book-info">
+
+                                        <h3>
+                                            ${escapeHTML(
+                                                book.title
+                                            )}
+                                        </h3>
+
+
+                                        <div class="book-author">
+
+                                            By
+                                            ${escapeHTML(
+                                                book.author ||
+                                                "Unknown Author"
+                                            )}
+
+                                        </div>
+
+
+                                        <span class="book-category">
+
+                                            ${escapeHTML(
+                                                book.category ||
+                                                "Fiction"
+                                            )}
+
+                                        </span>
+
+
+                                        <p class="book-description">
+
+                                            ${escapeHTML(
+                                                book.description ||
+                                                ""
+                                            )}
+
+                                        </p>
+
+
+                                        <div class="book-actions">
+
+                                            <button
+                                                class="edit-btn"
+                                                onclick="editBook('${book._id}')"
+                                            >
+                                                Edit
+                                            </button>
+
+
+                                            <button
+                                                class="delete-btn"
+                                                onclick="deleteBook('${book._id}')"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            `;
+
+                        }
+                    )
+                    .join("");
+
+        }
+
+
+        /* =====================================================
+           EDIT BOOK
+        ===================================================== */
+
+        function editBook(id) {
+
+            const book =
+                books.find(
+                    item =>
+                        item._id === id
+                );
+
+
+            if (!book) {
+
+                alert(
+                    "Book could not be found."
+                );
+
+                return;
+
+            }
+
+
+            document
+                .getElementById(
+                    "bookForm"
+                )
+                .classList.add(
+                    "show"
+                );
+
+
+            document
+                .getElementById(
+                    "formTitle"
+                )
+                .innerText =
+                    "Edit Book";
+
+
+            document
+                .getElementById(
+                    "bookId"
+                )
+                .value =
+                    book._id;
+
+
+            document
+                .getElementById(
+                    "bookTitle"
+                )
+                .value =
+                    book.title || "";
+
+
+            document
+                .getElementById(
+                    "bookAuthor"
+                )
+                .value =
+                    book.author || "";
+
+
+            document
+                .getElementById(
+                    "bookCategory"
+                )
+                .value =
+                    book.category || "Fiction";
+
+
+            document
+                .getElementById(
+                    "bookImage"
+                )
+                .value =
+                    book.coverImage || "";
+
+
+            document
+                .getElementById(
+                    "bookDescription"
+                )
+                .value =
+                    book.description || "";
+
+
+            document
+                .getElementById(
+                    "bookSource"
+                )
+                .value =
+                    book.source ||
+                    "Standard Ebooks";
+
+
+            document
+                .getElementById(
+                    "bookSourceUrl"
+                )
+                .value =
+                    book.sourceUrl || "";
+
+
+            document
+                .getElementById(
+                    "bookRightsStatus"
+                )
+                .value =
+                    book.rightsStatus ||
+                    "allowed";
+
+
+            document
+                .getElementById(
+                    "bookRightsNote"
+                )
+                .value =
+                    book.rightsNote || "";
+
+
+            document
+                .getElementById(
+                    "bookGithubRepository"
+                )
+                .value =
+                    book.githubRepository || "";
+
+
+            /*
+             * Don't show search results when editing.
+             */
+
+            document
+                .getElementById(
+                    "searchResults"
+                )
+                .classList.remove(
+                    "show"
+                );
+
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        }
+
+
+        /* =====================================================
+           DELETE BOOK
+        ===================================================== */
+
+        async function deleteBook(id) {
+
+            const book =
+                books.find(
+                    item =>
+                        item._id === id
+                );
+
+
+            if (!book) {
+
+                return;
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    `Delete "${book.title}"?`
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            const token =
+                getToken();
+
+
+            if (!token) {
+
+                alert(
+                    "Login session not found. Please login again."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * Find card and temporarily disable
+             * delete button.
+             */
+
+            const card =
+                document.getElementById(
+                    "book-card-" + id
+                );
+
+
+            if (card) {
+
+                const button =
+                    card.querySelector(
+                        ".delete-btn"
+                    );
+
+
+                if (button) {
+
+                    button.disabled =
+                        true;
+
+                    button.innerText =
+                        "Deleting...";
+
+                }
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        API_URL +
+                        "/api/books/" +
+                        id,
+
+                        {
+
+                            method: "DELETE",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " +
+                                    token,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+
+                    );
+
+
+                const responseText =
+                    await response.text();
+
+
+                let data = {};
+
+
+                try {
+
+                    data =
+                        JSON.parse(
+                            responseText
+                        );
+
+                }
+
+                catch (error) {
+
+                    throw new Error(
+                        "Invalid server response."
+                    );
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.message ||
+                        "Unable to delete book."
+
+                    );
+
+                }
+
+
+                /*
+                 * Remove from local array.
+                 */
+
+                books =
+                    books.filter(
+                        item =>
+                            item._id !== id
+                    );
+
+
+                /*
+                 * Immediately update screen.
+                 *
+                 * NO REFRESH REQUIRED.
+                 */
+
+                renderBooks();
+
+
+                alert(
+                    "Book deleted successfully!"
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "DELETE BOOK ERROR:",
+                    error
+                );
+
+
+                /*
+                 * Restore button if deletion failed.
+                 */
+
+                if (card) {
+
+                    const button =
+                        card.querySelector(
+                            ".delete-btn"
+                        );
+
+
+                    if (button) {
+
+                        button.disabled =
+                            false;
+
+                        button.innerText =
+                            "Delete";
+
+                    }
+
+                }
+
+
+                alert(
+
+                    error.message ||
+                    "Unable to delete book."
+
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        function logoutAdmin() {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            localStorage.removeItem(
+                "readliveToken"
+            );
+
+        }
+
+
+        /* =====================================================
+           ESCAPE HTML
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+            return String(
+                value || ""
+            )
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =====================================================
+           ENTER KEY SEARCH
+        ===================================================== */
+
+        document
+            .getElementById(
+                "bookSearchInput"
+            )
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        event.preventDefault();
+
+                        searchBooks();
+
+                    }
+
+                }
+            );
+
+
+        /* =====================================================
+           INITIAL LOAD
+        ===================================================== */
+
+        if (checkLogin()) {
+
+            loadBooks();
+
+        }
+
+    </script>
+
+</body>
+
+</html>
