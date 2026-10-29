@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: readlive-frontend
+    runtime: static
+    buildCommand: "echo 'No build step required'"
+    staticPublishPath: Frontend

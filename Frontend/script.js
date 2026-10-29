@@ -1,10 +1,14 @@
-
- // ========================================
- // READLIVE - COMMON SCRIPT
- // ========================================
+// ========================================
+// READLIVE - COMMON SCRIPT
+// ========================================
 
 // API address
-const API_BASE = "http://https://readlive-backend.onrender.com";
+// Uses the local backend when testing with Live Server,
+// and the Render backend when the site is deployed.
+const API_BASE =
+    location.hostname === "localhost" || location.hostname === "127.0.0.1"
+        ? "http://localhost:5000"
+        : "https://readlive-backend.onrender.com";
 
 // ========================================
 // USER / ADMIN LOGIN

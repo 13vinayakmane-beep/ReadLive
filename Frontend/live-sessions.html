@@ -169,7 +169,11 @@
 
     <script src="script.js"></script>
     <script>
-        const LIVE_API = "http://https://readlive-backend.onrender.com/api/live-sessions";
+        const LIVE_API_BASE =
+            location.hostname === "localhost" || location.hostname === "127.0.0.1"
+                ? "http://localhost:5000"
+                : "https://readlive-backend.onrender.com";
+        const LIVE_API = `${LIVE_API_BASE}/api/live-sessions`;
 
         let allLiveSessions = [];
         let loadingSessions = false;
